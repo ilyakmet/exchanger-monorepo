@@ -4,17 +4,6 @@
 //
 // import User from 'path/to/interfaces';
 
-export type User = {
-  id: number;
-  name: string;
-};
-
-export type CounterSelectorType = {
-  counterReducer: {
-    counter: number;
-  };
-};
-
 export type ReduxActionType<T, A> = {
   type: T;
   payload: A;
