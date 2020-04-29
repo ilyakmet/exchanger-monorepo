@@ -1,14 +1,23 @@
 # Exchanger Monorepo
 
+## Servers
+
+- [Dev](https://exchanger-dev.herokuapp.com/)
+- Production
+
 ## Technology Stack
 
 - Typescript
 - React
+- Ant Design
+- Styled Components
+- Bootstrap 4
 - Redux
 - Saga
 - Next
 - Storybook
 - Firebase
+- Heroku (only for MVP)
 - (GraphQL)
 
 ## Start
