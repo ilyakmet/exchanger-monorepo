@@ -11,6 +11,7 @@ import { rootSaga } from '../redux/sagas';
 
 // Styles
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'antd/dist/antd.less';
 
 const App: React.FC<any> = ({ Component, pageProps, store }): React.ReactElement => (
   <Provider store={store}>

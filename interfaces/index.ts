@@ -8,3 +8,13 @@ export type ReduxActionType<T, A> = {
   type: T;
   payload: A;
 };
+
+export type AppLayoutProps = {
+  title?: string;
+};
+
+export type AppStepsProps = {
+  children: any;
+  current: number;
+  marginV: number;
+};
