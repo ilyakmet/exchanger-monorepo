@@ -12,6 +12,8 @@
 - Ant Design
 - Styled Components
 - Bootstrap 4
+- Formik
+- Yup
 - Redux
 - Saga
 - Next
