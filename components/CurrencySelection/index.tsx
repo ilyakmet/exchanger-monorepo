@@ -1,54 +1,128 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 // Ant Design
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Select, Row, Col } from 'antd';
+
+// Formik
+import { useFormik } from 'formik';
+
+// Yup
+import * as Yup from 'yup';
+
+// SubComponents
+const { Option } = Select;
+
+// Redux Imitation ===!!!===
+import { currenciesList } from '../../utils';
+const [btc, eth] = currenciesList;
+const initialValues = {
+  sendCurrency: btc.ticker.toUpperCase(),
+  sendAmount: 0,
+  getCurrency: eth.ticker.toUpperCase(),
+  getAmount: 0,
+};
 
 export const CurrencySelection: React.FC = (): React.ReactElement => {
-  const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-  };
-  const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
-  };
+  const formik = useFormik({
+    initialValues,
+    validationSchema: Yup.lazy((values) => {
+      return Yup.object({
+        sendAmount: Yup.number()
+          .min(5, `Minimum amount is ${5} ${values.sendCurrency}`)
+          .typeError('Must be a number!'),
+        getAmount: Yup.number().typeError('Must be a number!'),
+      });
+    }),
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
 
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
+  // const defaultCurrencyLabel = (
+  //   <>
+  //     <img
+  //       style={{ width: '25px', height: '25px' }}
+  //       src="https://changenow.io/images/coins/btc.svg"
+  //       className="mb-1 p-1"
+  //     />
 
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
+  //     <span>{initialValues.sendCurrency}</span>
+  //   </>
+  // );
+
+  const defaultCurrencyLabel = (
+    <div style={{ height: '50px' }}>
+      <Row align="middle" gutter={[5, 0]} style={{ height: '20px', border: '1px solid #333' }}>
+        <Col>
+          <img
+            style={{ width: '20px', height: '20px' }}
+            src="https://changenow.io/images/coins/btc.svg"
+            className="mb-1"
+          />
+        </Col>
+
+        <Col>
+          <span style={{ fontSize: '8px', display: 'block' }}>{btc.ticker.toUpperCase()}</span>
+
+          <span style={{ fontSize: '8px', display: 'block' }}>{btc.name}</span>
+        </Col>
+      </Row>
+    </div>
+  );
+
+  // Currency Selector
+  const selectCurrency = (
+    <Select
+      style={{ width: '160px' }}
+      defaultValue={defaultCurrencyLabel}
+      showSearch
+      onChange={(value) => {
+        formik.setFieldValue('sendCurrency', value);
+      }}
+    >
+      {useMemo(
+        () =>
+          currenciesList.map(({ ticker, name, image }) => (
+            <Option key={name} value={name}>
+              <Row align="middle" gutter={[5, 0]}>
+                <Col>
+                  <img style={{ width: '20px', height: '20px' }} src={image} className="mb-1" />
+                </Col>
+
+                <Col>
+                  <span style={{ fontSize: '8px', display: 'block' }}>{ticker.toUpperCase()}</span>
+
+                  <span style={{ fontSize: '8px', display: 'block' }}>{name.toUpperCase()}</span>
+                </Col>
+              </Row>
+            </Option>
+          )),
+        [],
+      )}
+    </Select>
+  );
 
   return (
-    <Form
-      {...layout}
-      name="basic"
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-    >
+    <Form onFinish={() => formik.handleSubmit()}>
       <Form.Item
-        label="Username"
-        name="username"
-        rules={[{ required: true, message: 'Please input your username!' }]}
+        name="yousend"
+        help={
+          formik.touched.sendAmount && formik.errors.sendAmount
+            ? formik.errors.sendAmount
+            : 'You Send'
+        }
+        validateStatus={formik.touched.sendAmount && formik.errors.sendAmount ? 'error' : 'success'}
       >
-        <Input />
+        <Input
+          id="yousend"
+          {...formik.getFieldProps('sendAmount')}
+          addonAfter={selectCurrency}
+          size="large"
+          allowClear
+        />
       </Form.Item>
 
-      <Form.Item
-        label="Password"
-        name="password"
-        rules={[{ required: true, message: 'Please input your password!' }]}
-      >
-        <Input.Password />
-      </Form.Item>
-
-      <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-        <Checkbox>Remember me</Checkbox>
-      </Form.Item>
-
-      <Form.Item {...tailLayout}>
+      <Form.Item>
         <Button type="primary" htmlType="submit">
           Submit
         </Button>

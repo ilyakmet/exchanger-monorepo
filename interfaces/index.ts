@@ -18,3 +18,12 @@ export type AppStepsProps = {
   current: number;
   marginV: number;
 };
+
+export type Step1Props = {
+  marginV: number;
+};
+
+export type CurrenciesListItemType = {
+  index: string;
+  minSendAmount: number;
+};
