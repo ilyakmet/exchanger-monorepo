@@ -1,132 +1,138 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, ReactNode } from 'react';
+
+// Types
+import { LabelSelectorProps } from '../../interfaces';
 
 // Ant Design
-import { Form, Input, Button, Select, Row, Col } from 'antd';
+import { Form, Input, Button, Select, Typography, Row, Col } from 'antd';
 
-// Formik
-import { useFormik } from 'formik';
+// React Hook Form
+import { useForm, Controller } from 'react-hook-form';
 
 // Yup
 import * as Yup from 'yup';
 
+// Components
+import { CurrencyLabel } from '..';
+
 // SubComponents
 const { Option } = Select;
+const { Text } = Typography;
 
 // Redux Imitation ===!!!===
 import { currenciesList } from '../../utils';
+
 const [btc, eth] = currenciesList;
-const initialValues = {
-  sendCurrency: btc.ticker.toUpperCase(),
-  sendAmount: 0,
-  getCurrency: eth.ticker.toUpperCase(),
-  getAmount: 0,
-};
 
 export const CurrencySelection: React.FC = (): React.ReactElement => {
-  const formik = useFormik({
-    initialValues,
-    validationSchema: Yup.lazy((values) => {
-      return Yup.object({
-        sendAmount: Yup.number()
-          .min(5, `Minimum amount is ${5} ${values.sendCurrency}`)
-          .typeError('Must be a number!'),
-        getAmount: Yup.number().typeError('Must be a number!'),
-      });
-    }),
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+  const { control, errors, watch, handleSubmit } = useForm({
+    mode: 'onBlur',
+    defaultValues: {
+      sendAmount: 5,
+      sendCurrency: btc.ticker,
+      getAmount: 5,
+      getCurrency: eth.ticker,
     },
+    validationSchema: Yup.lazy((values) =>
+      Yup.object().shape({
+        sendAmount: Yup.number()
+          .min(5, `Minimum amount is ${5} ${values.sendCurrency.toUpperCase()}`)
+          .typeError(`Minimum amount is ${5} ${values.sendCurrency.toUpperCase()}`),
+        getAmount: Yup.number(),
+      }),
+    ),
   });
 
-  // const defaultCurrencyLabel = (
-  //   <>
-  //     <img
-  //       style={{ width: '25px', height: '25px' }}
-  //       src="https://changenow.io/images/coins/btc.svg"
-  //       className="mb-1 p-1"
-  //     />
+  const onSubmit = (data) => {
+    console.log(data);
+  };
 
-  //     <span>{initialValues.sendCurrency}</span>
-  //   </>
-  // );
+  const watchsendAmount = watch('sendAmount');
+  const watchgetAmount = watch('getAmount');
 
-  const defaultCurrencyLabel = (
-    <div style={{ height: '50px' }}>
-      <Row align="middle" gutter={[5, 0]} style={{ height: '20px', border: '1px solid #333' }}>
-        <Col>
-          <img
-            style={{ width: '20px', height: '20px' }}
-            src="https://changenow.io/images/coins/btc.svg"
-            className="mb-1"
-          />
-        </Col>
-
-        <Col>
-          <span style={{ fontSize: '8px', display: 'block' }}>{btc.ticker.toUpperCase()}</span>
-
-          <span style={{ fontSize: '8px', display: 'block' }}>{btc.name}</span>
-        </Col>
-      </Row>
-    </div>
-  );
-
-  // Currency Selector
-  const selectCurrency = (
-    <Select
-      style={{ width: '160px' }}
-      defaultValue={defaultCurrencyLabel}
-      showSearch
-      onChange={(value) => {
-        formik.setFieldValue('sendCurrency', value);
-      }}
-    >
-      {useMemo(
-        () =>
-          currenciesList.map(({ ticker, name, image }) => (
-            <Option key={name} value={name}>
-              <Row align="middle" gutter={[5, 0]}>
-                <Col>
-                  <img style={{ width: '20px', height: '20px' }} src={image} className="mb-1" />
-                </Col>
-
-                <Col>
-                  <span style={{ fontSize: '8px', display: 'block' }}>{ticker.toUpperCase()}</span>
-
-                  <span style={{ fontSize: '8px', display: 'block' }}>{name.toUpperCase()}</span>
-                </Col>
-              </Row>
-            </Option>
-          )),
-        [],
-      )}
-    </Select>
+  const _LabelSelector: React.FC<{ name: string }> = ({ name }) => (
+    <Controller
+      name={name}
+      control={control}
+      as={
+        <Select style={{ width: '160px' }} showSearch>
+          {useMemo(
+            () =>
+              currenciesList.map(({ ticker, image }) => (
+                <Option key={ticker} value={ticker}>
+                  <CurrencyLabel ticker={ticker} image={image} />
+                </Option>
+              )),
+            [],
+          )}
+        </Select>
+      }
+    />
   );
 
   return (
-    <Form onFinish={() => formik.handleSubmit()}>
-      <Form.Item
-        name="yousend"
-        help={
-          formik.touched.sendAmount && formik.errors.sendAmount
-            ? formik.errors.sendAmount
-            : 'You Send'
-        }
-        validateStatus={formik.touched.sendAmount && formik.errors.sendAmount ? 'error' : 'success'}
-      >
-        <Input
-          id="yousend"
-          {...formik.getFieldProps('sendAmount')}
-          addonAfter={selectCurrency}
-          size="large"
-          allowClear
-        />
-      </Form.Item>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Row justify="center" gutter={[0, 15]}>
+        <Col span={24}>
+          <Form.Item
+            help={
+              errors.sendAmount?.message && watchsendAmount.toString() !== ''
+                ? errors.sendAmount.message
+                : 'You Send'
+            }
+            validateStatus={
+              errors.sendAmount && watchsendAmount.toString() !== '' ? 'error' : 'success'
+            }
+          >
+            <Controller
+              name="sendAmount"
+              control={control}
+              as={
+                <Input
+                  addonAfter={<_LabelSelector name="sendCurrency" />}
+                  size="large"
+                  allowClear
+                />
+              }
+            />
+          </Form.Item>
+        </Col>
 
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+        <Col span={24}>
+          <Form.Item
+            help="You Get"
+            // validateStatus={
+            //   errors.getAmount && watchgetAmount.toString() !== '' ? 'error' : 'success'
+            // }
+          >
+            <Controller
+              name="getAmount"
+              control={control}
+              as={
+                <Input addonAfter={<_LabelSelector name="getCurrency" />} size="large" allowClear />
+              }
+            />
+          </Form.Item>
+        </Col>
+
+        <Col span={24}>
+          <Row justify="center">
+            <Text>1 BTC ~ 35.861723 ETH Expected Rate</Text>
+          </Row>
+        </Col>
+
+        <Col span={15}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            shape="round"
+            size="large"
+            style={{ width: '100%', height: '50px' }}
+          >
+            Swap
+          </Button>
+        </Col>
+      </Row>
+    </form>
   );
 };

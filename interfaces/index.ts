@@ -24,6 +24,23 @@ export type Step1Props = {
 };
 
 export type CurrenciesListItemType = {
-  index: string;
-  minSendAmount: number;
+  ticker: string;
+  name: string;
+  image: string;
+  hasExternalId: boolean;
+  isFiat: boolean;
+  featured: boolean;
+  isStable: boolean;
+  supportsFixedRate: boolean;
+};
+
+export type CurrencyLabelType = {
+  ticker: string;
+  image: string;
+};
+
+export type LabelSelectorProps = {
+  defaultImage: string;
+  defaultTicker: string;
+  currenciesList: Array<CurrenciesListItemType>;
 };

@@ -17,8 +17,12 @@ export const Step1: React.FC<Step1Props> = ({ marginV }) => (
       <RateSelection />
     </Col>
 
-    <Col>
-      <CurrencySelection />
+    <Col lg={24}>
+      <Row justify="center">
+        <Col lg={20}>
+          <CurrencySelection />
+        </Col>
+      </Row>
     </Col>
   </Row>
 );
