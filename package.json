@@ -18,6 +18,8 @@
     "@zeit/next-source-maps": "^0.0.3",
     "antd": "^4.1.5",
     "axios": "^0.19.2",
+    "babel-loader": "^8.1.0",
+    "babel-preset-react-app": "^9.1.2",
     "bootstrap": "^4.4.1",
     "formik": "^2.1.4",
     "moment": "^2.25.1",
@@ -53,6 +55,7 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.1",
     "prettier": "^2.0.5",
+    "redux-devtools-extension": "^2.13.8",
     "typescript": "3.7.3"
   },
   "license": "ISC"

@@ -6,5 +6,6 @@ export const selectFromTo = (state: any) => {
 };
 
 export const selectCurrencyList = (state: any) => state.exchangeForm.currencyList;
-
 export const selectdefaultAmounts = (state: any) => state.exchangeForm.defaultAmounts;
+export const selectEstimate = (state: any) => state.exchangeForm.estimate;
+export const selectMinAmount = (state: any) => state.exchangeForm.minAmount;

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // Types
-import { LabelSelectorProps, CurrencySelectionProps } from '../../interfaces';
+import { LabelSelectorProps } from '../../interfaces';
 
 // Ant Design
 import { Form, Input, Button, Select, Typography, Row, Col } from 'antd';
@@ -16,40 +16,48 @@ import * as Yup from 'yup';
 import { CurrencyLabel } from '..';
 
 // Redux
-import { useSelector } from 'react-redux';
-// import { updateCurrencyListSaga } from '../../redux/actions/exchangeForm';
-// import { _updateCurrencyListSaga } from '../../redux/types/exchangeForm';
-import { selectFromTo, selectdefaultAmounts } from '../../redux/selectors/exchangeForm';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  updateCurrencyListSaga,
+  updateMinAmountSaga,
+  updateEstimateSaga,
+} from '../../redux/actions/exchangeForm';
+import {
+  selectCurrencyList,
+  selectFromTo,
+  selectdefaultAmounts,
+  selectEstimate,
+  selectMinAmount,
+} from '../../redux/selectors/exchangeForm';
+
+// Utils
+import { calculateRate } from '../../utils';
 
 // // SubComponents
 const { Option } = Select;
 const { Text } = Typography;
 
-export const CurrencySelection: React.FC<CurrencySelectionProps> = ({
-  currencyList,
-}): React.ReactElement => {
+export const CurrencySelection = (): React.ReactElement => {
+  const currencyList = useSelector(selectCurrencyList);
   const { from, to } = useSelector(selectFromTo);
   const defaultAmounts = useSelector(selectdefaultAmounts);
-  // const dispatch = useDispatch();
+  const estimate = useSelector(selectEstimate);
+  const minAmount = useSelector(selectMinAmount);
+  const dispatch = useDispatch();
+
+  console.log({ from, to });
 
   const formik = useFormik({
     initialValues: {
       amount: defaultAmounts[from.ticker],
       from: from.ticker,
-      estimate: 5,
       to: to.ticker,
     },
     validationSchema: Yup.lazy((values: any) => {
-      const message = `Minimum amount is ${
-        defaultAmounts[values.from]
-      } ${values.from.toUpperCase()}`;
+      const message = `Minimum amount is ${minAmount} ${values.from.toUpperCase()}`;
 
       return Yup.object().shape({
-        amount: Yup.number()
-          .required(message)
-          .min(defaultAmounts[values.from], message)
-          .typeError(message),
-        estimate: Yup.number().required(),
+        amount: Yup.number().required(message).min(minAmount, message).typeError(message),
       });
     }),
     onSubmit: (values) => {
@@ -58,6 +66,24 @@ export const CurrencySelection: React.FC<CurrencySelectionProps> = ({
     },
   });
 
+  useEffect(() => {
+    dispatch(updateCurrencyListSaga());
+  }, []);
+
+  useEffect(() => {
+    dispatch(updateMinAmountSaga({ from: formik.values.from, to: formik.values.to }));
+
+    if (formik.values.amount >= minAmount) {
+      dispatch(
+        updateEstimateSaga({
+          amount: formik.values.amount,
+          from: formik.values.from,
+          to: formik.values.to,
+        }),
+      );
+    }
+  }, [formik.values.amount, formik.values.from, formik.values.to]);
+
   const _LabelSelector: React.FC<LabelSelectorProps> = ({
     fieldName,
     defaultTicker,
@@ -65,22 +91,13 @@ export const CurrencySelection: React.FC<CurrencySelectionProps> = ({
   }) => (
     <Select
       style={{ width: '160px' }}
-      defaultValue={defaultTicker}
+      // defaultValue={defaultTicker}
+      value={defaultTicker}
       showSearch
       onChange={(value) => {
         formik.setFieldValue(fieldName, value);
       }}
     >
-      {/* {useMemo(
-        () =>
-          currencyList.map(({ ticker, image }) => (
-            <Option key={ticker} value={ticker}>
-              <CurrencyLabel ticker={ticker} image={image} />
-            </Option>
-          )),
-        [currencyList],
-      )} */}
-
       {currencyList.map(({ ticker, image }) => (
         <Option key={ticker} value={ticker}>
           <CurrencyLabel ticker={ticker} image={image} />
@@ -102,15 +119,14 @@ export const CurrencySelection: React.FC<CurrencySelectionProps> = ({
                 validateStatus={formik.touched.amount && formik.errors.amount ? 'error' : 'success'}
               >
                 <Input
-                  id="amount"
+                  size="large"
+                  allowClear
                   {...formik.getFieldProps('amount')}
                   addonAfter={_LabelSelector({
                     fieldName: 'from',
-                    defaultTicker: from.ticker,
+                    defaultTicker: formik.values.from,
                     currencyList,
                   })}
-                  size="large"
-                  allowClear
                 />
               </Form.Item>
             </Col>
@@ -118,23 +134,24 @@ export const CurrencySelection: React.FC<CurrencySelectionProps> = ({
             <Col span={24}>
               <Form.Item help="You Get">
                 <Input
-                  disabled
-                  id="estimate"
-                  {...formik.getFieldProps('estimate')}
-                  addonAfter={_LabelSelector({
-                    fieldName: 'to',
-                    defaultTicker: to.ticker,
-                    currencyList,
-                  })}
+                  value={estimate}
                   size="large"
                   allowClear
+                  disabled
+                  addonAfter={_LabelSelector({
+                    fieldName: 'to',
+                    defaultTicker: formik.values.to,
+                    currencyList,
+                  })}
                 />
               </Form.Item>
             </Col>
 
             <Col span={24}>
               <Row justify="center">
-                <Text>{`1 ${formik.values.from.toUpperCase()} ~ 35.861723 ${formik.values.to.toUpperCase()} Expected Rate`}</Text>
+                <Text>{`1 ${formik.values.from.toUpperCase()} ~ ${
+                  calculateRate(formik.values.amount, estimate, 1000000) || '...'
+                } ${formik.values.to.toUpperCase()} Expected Rate`}</Text>
               </Row>
             </Col>
 

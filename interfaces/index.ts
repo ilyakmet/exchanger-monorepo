@@ -55,3 +55,18 @@ export type AmountFromEstimateToType = {
 export type CurrencySelectionProps = {
   currencyList: Array<CurrenciesListItemType>;
 };
+
+export type getEstimateParams = {
+  amount: number;
+  from: string;
+  to: string;
+};
+
+export type getMinAmountParams = {
+  from: string;
+  to: string;
+};
+
+export type getMinAmountReturn = {
+  minAmount: number;
+};

@@ -1,1 +1,1 @@
-export { currenciesList } from './currenciesList';
+export { calculateRate } from './calculateRate';

@@ -7,6 +7,7 @@ import {
   _updateAmountFromEstimateTo,
   _updateCurrencyList,
   _setIsLoading,
+  _updateEstimate,
 } from '../types/exchangeForm';
 
 // Initial state
@@ -22,7 +23,7 @@ const initialState = {
   },
   amount: null,
   amountTo: null,
-  minAmount: null,
+  minAmount: 0,
   estimate: null,
   rate: null,
   currencyList: [],
@@ -200,14 +201,17 @@ const initialState = {
 // Reducer
 export const exchangeForm = (state = initialState, action: ReduxActionType<string, any>) => {
   switch (action.type) {
-    case _updateMinAmount:
-      return { ...state };
-    case _updateAmountFromEstimateTo:
-      return { ...state, ...action.payload };
-    case _updateCurrencyList:
-      return { ...state, currencyList: action.payload };
     case _setIsLoading:
       return { ...state, isLoading: true };
+    case _updateMinAmount:
+      return { ...state, minAmount: action.payload };
+    case _updateCurrencyList:
+      return { ...state, currencyList: action.payload };
+    case _updateEstimate:
+      return { ...state, estimate: action.payload };
+    case _updateAmountFromEstimateTo:
+      return { ...state, ...action.payload };
+
     default:
       return { ...state };
   }
