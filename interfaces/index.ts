@@ -40,7 +40,18 @@ export type CurrencyLabelType = {
 };
 
 export type LabelSelectorProps = {
-  defaultImage: string;
+  fieldName: string;
   defaultTicker: string;
-  currenciesList: Array<CurrenciesListItemType>;
+  currencyList: Array<CurrenciesListItemType>;
+};
+
+export type AmountFromEstimateToType = {
+  amount: number;
+  from: string;
+  estimate: number;
+  to: string;
+};
+
+export type CurrencySelectionProps = {
+  currencyList: Array<CurrenciesListItemType>;
 };

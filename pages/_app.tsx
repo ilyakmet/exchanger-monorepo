@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 // Redux
 import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
@@ -11,7 +13,7 @@ import { rootSaga } from '../redux/sagas';
 
 // Styles
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'antd/dist/antd.less';
+import 'antd/dist/antd.css';
 
 const App: React.FC<any> = ({ Component, pageProps, store }): React.ReactElement => (
   <Provider store={store}>
@@ -22,7 +24,10 @@ const App: React.FC<any> = ({ Component, pageProps, store }): React.ReactElement
 const makeStore: any = (): any => {
   const sagaMiddleware = createSagaMiddleware();
 
-  const store = createStore(rootReducer, compose(applyMiddleware(sagaMiddleware)));
+  const composeEnhancers =
+    (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+
+  const store = createStore(rootReducer, composeEnhancers(applyMiddleware(sagaMiddleware)));
 
   sagaMiddleware.run(rootSaga);
 

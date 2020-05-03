@@ -13,7 +13,7 @@ export default { title: 'App' };
 export const _Step1 = () => (
   <AppLayout>
     <Row justify="center">
-      <Col lg={12}>
+      <Col lg={12} sm={18}>
         <AppSteps current={0} marginV={50}>
           <Step1 marginV={50} />
         </AppSteps>
