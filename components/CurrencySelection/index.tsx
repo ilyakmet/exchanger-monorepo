@@ -20,7 +20,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   updateCurrencyListSaga,
   updateMinAmountSaga,
-  updateEstimateSaga,
+  updateEstimateAndEstimatedArrivalSaga,
+  updateAmountFromTo,
+  incCurrentStep,
 } from '../../redux/actions/exchangeForm';
 import {
   selectCurrencyList,
@@ -45,8 +47,6 @@ export const CurrencySelection = (): React.ReactElement => {
   const minAmount = useSelector(selectMinAmount);
   const dispatch = useDispatch();
 
-  console.log({ from, to });
-
   const formik = useFormik({
     initialValues: {
       amount: defaultAmounts[from.ticker],
@@ -61,8 +61,9 @@ export const CurrencySelection = (): React.ReactElement => {
       });
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-      console.log({ values });
+      console.log(values);
+      dispatch(updateAmountFromTo({ ...values }));
+      dispatch(incCurrentStep());
     },
   });
 
@@ -75,7 +76,7 @@ export const CurrencySelection = (): React.ReactElement => {
 
     if (formik.values.amount >= minAmount) {
       dispatch(
-        updateEstimateSaga({
+        updateEstimateAndEstimatedArrivalSaga({
           amount: formik.values.amount,
           from: formik.values.from,
           to: formik.values.to,
@@ -110,7 +111,7 @@ export const CurrencySelection = (): React.ReactElement => {
     <>
       {currencyList.length ? (
         <Form onFinish={() => formik.handleSubmit()}>
-          <Row justify="center" gutter={[0, 15]}>
+          <Row justify="center" gutter={[0, 12]}>
             <Col span={24}>
               <Form.Item
                 help={
@@ -149,19 +150,21 @@ export const CurrencySelection = (): React.ReactElement => {
 
             <Col span={24}>
               <Row justify="center">
-                <Text>{`1 ${formik.values.from.toUpperCase()} ~ ${
-                  calculateRate(formik.values.amount, estimate, 1000000) || '...'
-                } ${formik.values.to.toUpperCase()} Expected Rate`}</Text>
+                <Text>
+                  {`1 ${formik.values.from.toUpperCase()} ~ ${
+                    calculateRate(formik.values.amount, estimate, 1000000) || '...'
+                  } ${formik.values.to.toUpperCase()} Expected Rate`}
+                </Text>
               </Row>
             </Col>
 
-            <Col span={15}>
+            <Col span={12}>
               <Button
                 type="primary"
                 htmlType="submit"
-                shape="round"
+                // shape="round"
                 size="large"
-                style={{ width: '100%', height: '50px' }}
+                style={{ width: '100%' }}
               >
                 Swap
               </Button>
@@ -169,7 +172,9 @@ export const CurrencySelection = (): React.ReactElement => {
           </Row>
         </Form>
       ) : (
-        <div>Loading...</div>
+        <div>
+          <img src="https://cultofthepartyparrot.com/parrots/hd/parrot.gif" />
+        </div>
       )}
     </>
   );

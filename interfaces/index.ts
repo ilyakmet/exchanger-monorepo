@@ -45,13 +45,6 @@ export type LabelSelectorProps = {
   currencyList: Array<CurrenciesListItemType>;
 };
 
-export type AmountFromEstimateToType = {
-  amount: number;
-  from: string;
-  estimate: number;
-  to: string;
-};
-
 export type CurrencySelectionProps = {
   currencyList: Array<CurrenciesListItemType>;
 };
@@ -69,4 +62,23 @@ export type getMinAmountParams = {
 
 export type getMinAmountReturn = {
   minAmount: number;
+};
+
+export type AmountFromToType = getEstimateParams;
+
+export type updateAmountToParams = {
+  newAmountTo: string;
+};
+
+export type StepButtonsProps = {
+  rightButtonOnClick?: () => void;
+  leftButtonOnClick: () => void;
+  rightButtonName: string;
+  leftButtonName: string;
+};
+
+export type updateEstimateAndEstimatedArrivalParams = {
+  estimatedAmount: number;
+  transactionSpeedForecast: string;
+  warningMessage: null | string;
 };

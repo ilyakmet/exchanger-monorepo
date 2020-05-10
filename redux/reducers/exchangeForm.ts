@@ -4,14 +4,20 @@ import { ReduxActionType } from '../../interfaces';
 // Actions Types
 import {
   _updateMinAmount,
-  _updateAmountFromEstimateTo,
+  _updateAmountFromTo,
   _updateCurrencyList,
   _setIsLoading,
-  _updateEstimate,
+  _updateEstimateAndEstimatedArrival,
+  _incCurrentStep,
+  _decCurrentStep,
+  _updateAmountTo,
+  _resetAmountTo,
 } from '../types/exchangeForm';
 
 // Initial state
 const initialState = {
+  currentStep: 0,
+  estimatedArrival: null,
   rateMode: 'FLOATING',
   from: {
     ticker: 'btc',
@@ -207,11 +213,27 @@ export const exchangeForm = (state = initialState, action: ReduxActionType<strin
       return { ...state, minAmount: action.payload };
     case _updateCurrencyList:
       return { ...state, currencyList: action.payload };
-    case _updateEstimate:
-      return { ...state, estimate: action.payload };
-    case _updateAmountFromEstimateTo:
-      return { ...state, ...action.payload };
-
+    case _updateEstimateAndEstimatedArrival:
+      return {
+        ...state,
+        estimate: action.payload.estimatedAmount,
+        estimatedArrival: action.payload.transactionSpeedForecast,
+      };
+    case _updateAmountFromTo:
+      return {
+        ...state,
+        amount: action.payload.amount,
+        from: { ticker: action.payload.from, name: '' },
+        to: { ticker: action.payload.to, name: '' },
+      };
+    case _incCurrentStep:
+      return { ...state, currentStep: state.currentStep + 1 };
+    case _decCurrentStep:
+      return { ...state, currentStep: state.currentStep - 1 };
+    case _updateAmountTo:
+      return { ...state, amountTo: action.payload };
+    case _resetAmountTo:
+      return { ...state, amountTo: null };
     default:
       return { ...state };
   }

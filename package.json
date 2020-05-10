@@ -11,6 +11,7 @@
     "prettier": "prettier --write ./components/** ./pages/** ./redux/**"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.1.0",
     "@storybook/addon-viewport": "^5.3.18",
     "@storybook/react": "^5.3.18",
     "@zeit/next-less": "^1.0.1",

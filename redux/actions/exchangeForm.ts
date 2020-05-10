@@ -1,22 +1,28 @@
 // Types
 import {
   ReduxActionType,
-  AmountFromEstimateToType,
+  AmountFromToType,
   CurrenciesListItemType,
   getEstimateParams,
   getMinAmountParams,
+  updateAmountToParams,
+  updateEstimateAndEstimatedArrivalParams,
 } from '../../interfaces';
 
 // Actions Types
 import {
   _updateMinAmount,
   _updateMinAmountSaga,
-  _updateAmountFromEstimateTo,
+  _updateAmountFromTo,
   _updateCurrencyList,
   _updateCurrencyListSaga,
-  _updateEstimate,
-  _updateEstimateSaga,
+  _updateEstimateAndEstimatedArrival,
+  _updateEstimateAndEstimatedArrivalSaga,
   _setIsLoading,
+  _incCurrentStep,
+  _decCurrentStep,
+  _updateAmountTo,
+  _resetAmountTo,
 } from '../types/exchangeForm';
 
 // Actions
@@ -32,11 +38,11 @@ export const updateMinAmountSaga = (
   payload: pair,
 });
 
-export const updateAmountFromEstimateTo = (
-  newAmountFromEstimateTo: AmountFromEstimateToType,
-): ReduxActionType<string, AmountFromEstimateToType> => ({
-  type: _updateAmountFromEstimateTo,
-  payload: newAmountFromEstimateTo,
+export const updateAmountFromTo = (
+  newAmountFromTo: AmountFromToType,
+): ReduxActionType<string, AmountFromToType> => ({
+  type: _updateAmountFromTo,
+  payload: newAmountFromTo,
 });
 
 export const updateCurrencyList = (
@@ -51,19 +57,41 @@ export const updateCurrencyListSaga = (): ReduxActionType<string, null> => ({
   payload: null,
 });
 
-export const updateEstimate = (newEstimate: number): ReduxActionType<string, number> => ({
-  type: _updateEstimate,
-  payload: newEstimate,
+export const updateEstimateAndEstimatedArrival = (
+  params: updateEstimateAndEstimatedArrivalParams,
+): ReduxActionType<string, updateEstimateAndEstimatedArrivalParams> => ({
+  type: _updateEstimateAndEstimatedArrival,
+  payload: params,
 });
 
-export const updateEstimateSaga = (
+export const updateEstimateAndEstimatedArrivalSaga = (
   params: getEstimateParams,
 ): ReduxActionType<string, getEstimateParams> => ({
-  type: _updateEstimateSaga,
+  type: _updateEstimateAndEstimatedArrivalSaga,
   payload: params,
 });
 
 export const setIsLoadin = (): ReduxActionType<string, null> => ({
   type: _setIsLoading,
+  payload: null,
+});
+
+export const incCurrentStep = (): ReduxActionType<string, null> => ({
+  type: _incCurrentStep,
+  payload: null,
+});
+
+export const decCurrentStep = (): ReduxActionType<string, null> => ({
+  type: _decCurrentStep,
+  payload: null,
+});
+
+export const updateAmountTo = (params: updateAmountToParams): ReduxActionType<string, string> => ({
+  type: _updateAmountTo,
+  payload: params.newAmountTo,
+});
+
+export const resetAmountTo = (): ReduxActionType<string, null> => ({
+  type: _updateAmountTo,
   payload: null,
 });

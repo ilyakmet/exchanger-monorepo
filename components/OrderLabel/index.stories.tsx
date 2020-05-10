@@ -1,23 +1,24 @@
+/* eslint-disable react/self-closing-comp */
 import React from 'react';
 import { Row, Col } from 'antd';
-import { Step1 } from '.';
+import { OrderLabel } from '.';
 import { AppLayout } from '../AppLayout';
 
-export default { title: 'Step1' };
+export default { title: 'OrderLabel' };
 
-export const Index = () => <Step1 />;
+export const Index = () => <OrderLabel />;
 
 export const WithLayout = () => (
   <AppLayout>
-    <Step1 />
+    <OrderLabel />
   </AppLayout>
 );
 
 export const WithLayoutAndGrid = () => (
   <AppLayout>
     <Row justify="center">
-      <Col>
-        <Step1 />
+      <Col md={20} lg={12}>
+        <OrderLabel />
       </Col>
     </Row>
   </AppLayout>

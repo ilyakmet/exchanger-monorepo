@@ -20,5 +20,5 @@ export const getEstimate = async ({ amount, from, to }: getEstimateParams) => {
   const response = await axios.get(
     `${apiRoot}/exchange-amount/${amount}/${from}_${to}?api_key=changenow`,
   );
-  return response.data.estimatedAmount;
+  return response.data;
 };

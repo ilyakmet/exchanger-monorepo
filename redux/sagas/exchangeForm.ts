@@ -8,15 +8,17 @@ import { takeEvery, put, call } from 'redux-saga/effects';
 import {
   _updateMinAmount,
   _updateMinAmountSaga,
-  _updateAmountFromEstimateTo,
   _updateCurrencyList,
   _updateCurrencyListSaga,
-  _updateEstimate,
-  _updateEstimateSaga,
+  _updateEstimateAndEstimatedArrivalSaga,
 } from '../types/exchangeForm';
 
 // Actions
-import { updateCurrencyList, updateEstimate, updateMinAmount } from '../actions/exchangeForm';
+import {
+  updateCurrencyList,
+  updateEstimateAndEstimatedArrival,
+  updateMinAmount,
+} from '../actions/exchangeForm';
 
 // Lib
 import { getCurrencyList, getEstimate, getMinAmount } from '../../lib/fetch';
@@ -26,14 +28,18 @@ function* updateCurrencyListSaga() {
   yield put(updateCurrencyList(currencyList));
 }
 
-function* updateEstimateSaga({ payload }: ReduxActionType<string, getEstimateParams>) {
+function* updateEstimateAndEstimatedArrivalSaga({
+  payload,
+}: ReduxActionType<string, getEstimateParams>) {
   console.log('updateEstimateSaga');
-  const estimate = yield call(getEstimate, {
+  const response = yield call(getEstimate, {
     amount: payload.amount,
     from: payload.from,
     to: payload.to,
   });
-  yield put(updateEstimate(estimate));
+
+  if (!response.warningMessage) yield put(updateEstimateAndEstimatedArrival(response));
+  // ToDo warningMessage error case
 }
 
 function* updateMinAmountSaga({ payload }: ReduxActionType<string, getMinAmountParams>) {
@@ -42,7 +48,7 @@ function* updateMinAmountSaga({ payload }: ReduxActionType<string, getMinAmountP
 }
 
 export function* exchangeFormWatcherSaga() {
-  yield takeEvery(_updateEstimateSaga, updateEstimateSaga);
+  yield takeEvery(_updateEstimateAndEstimatedArrivalSaga, updateEstimateAndEstimatedArrivalSaga);
   yield takeEvery(_updateMinAmountSaga, updateMinAmountSaga);
   yield takeEvery(_updateCurrencyListSaga, updateCurrencyListSaga);
 }
