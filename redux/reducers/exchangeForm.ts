@@ -18,6 +18,7 @@ import {
 const initialState = {
   currentStep: 0,
   estimatedArrival: null,
+  isAmountToCopied: true,
   rateMode: 'FLOATING',
   from: {
     ticker: 'btc',

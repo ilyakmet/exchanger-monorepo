@@ -32,7 +32,7 @@ export const OrderLabel: React.FC = (): React.ReactElement => {
         background: '#FAFAFA',
         border: '1px solid #1890FF',
         borderRadius: '2px',
-        padding: '0.5rem',
+        padding: '1rem',
       }}
     >
       <Col xs={24} sm={24} md={24} lg={24}>
