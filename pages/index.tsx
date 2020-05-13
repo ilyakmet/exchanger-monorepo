@@ -4,7 +4,7 @@ import React from 'react';
 import { Row, Col } from 'antd';
 
 // Components
-import { AppLayout, AppSteps, Step1, Step2, Step3 } from '../components';
+import { AppLayout, AppSteps, Step1, Step2, Step3, Step4 } from '../components';
 
 const Index = () => (
   <AppLayout title="Exchanger">
@@ -14,6 +14,8 @@ const Index = () => (
           <Step1 />
           <Step2 />
           <Step3 />
+          <Step4 />
+          <Step4 />
         </AppSteps>
       </Col>
     </Row>

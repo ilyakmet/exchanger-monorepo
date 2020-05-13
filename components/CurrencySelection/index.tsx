@@ -18,17 +18,17 @@ import { CurrencyLabel } from '..';
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  updateCurrencyListSaga,
-  updateMinAmountSaga,
-  updateEstimateAndEstimatedArrivalSaga,
-  updateAmountFromTo,
+  // _setIsLoading,
   incCurrentStep,
+  setExpectedSendAmountFromCurrencyToCurrency,
+  setMinAmountSaga,
+  setCurrencyListSaga,
+  setExpectedReceiveAmountEstimatedArrivalSaga,
 } from '../../redux/actions/exchangeForm';
 import {
   selectCurrencyList,
-  selectFromTo,
+  selectOrderData,
   selectdefaultAmounts,
-  selectEstimate,
   selectMinAmount,
 } from '../../redux/selectors/exchangeForm';
 
@@ -40,18 +40,17 @@ const { Option } = Select;
 const { Text } = Typography;
 
 export const CurrencySelection = (): React.ReactElement => {
-  const currencyList = useSelector(selectCurrencyList);
-  const { from, to } = useSelector(selectFromTo);
-  const defaultAmounts = useSelector(selectdefaultAmounts);
-  const estimate = useSelector(selectEstimate);
-  const minAmount = useSelector(selectMinAmount);
   const dispatch = useDispatch();
+  const currencyList = useSelector(selectCurrencyList);
+  const defaultAmounts = useSelector(selectdefaultAmounts);
+  const minAmount = useSelector(selectMinAmount);
+  const { expectedReceiveAmount, fromCurrency, toCurrency } = useSelector(selectOrderData);
 
   const formik = useFormik({
     initialValues: {
-      amount: defaultAmounts[from.ticker],
-      from: from.ticker,
-      to: to.ticker,
+      expectedSendAmount: defaultAmounts[fromCurrency.ticker],
+      fromCurrency: fromCurrency.ticker,
+      toCurrency: toCurrency.ticker,
     },
     validationSchema: Yup.lazy((values: any) => {
       const message = `Minimum amount is ${minAmount} ${values.from.toUpperCase()}`;
@@ -62,28 +61,33 @@ export const CurrencySelection = (): React.ReactElement => {
     }),
     onSubmit: (values) => {
       console.log(values);
-      dispatch(updateAmountFromTo({ ...values }));
+      dispatch(setExpectedSendAmountFromCurrencyToCurrency({ ...values }));
       dispatch(incCurrentStep());
     },
   });
 
   useEffect(() => {
-    dispatch(updateCurrencyListSaga());
+    dispatch(setCurrencyListSaga());
   }, []);
 
   useEffect(() => {
-    dispatch(updateMinAmountSaga({ from: formik.values.from, to: formik.values.to }));
+    dispatch(
+      setMinAmountSaga({
+        fromCurrency: formik.values.fromCurrency,
+        toCurrency: formik.values.toCurrency,
+      }),
+    );
 
-    if (formik.values.amount >= minAmount) {
+    if (formik.values.expectedSendAmount >= minAmount) {
       dispatch(
-        updateEstimateAndEstimatedArrivalSaga({
-          amount: formik.values.amount,
-          from: formik.values.from,
-          to: formik.values.to,
+        setExpectedReceiveAmountEstimatedArrivalSaga({
+          expectedSendAmount: formik.values.expectedSendAmount,
+          fromCurrency: formik.values.fromCurrency,
+          toCurrency: formik.values.toCurrency,
         }),
       );
     }
-  }, [formik.values.amount, formik.values.from, formik.values.to]);
+  }, [formik.values.expectedSendAmount, formik.values.fromCurrency, formik.values.toCurrency]);
 
   const _LabelSelector: React.FC<LabelSelectorProps> = ({
     fieldName,
@@ -92,7 +96,6 @@ export const CurrencySelection = (): React.ReactElement => {
   }) => (
     <Select
       style={{ width: '160px' }}
-      // defaultValue={defaultTicker}
       value={defaultTicker}
       showSearch
       onChange={(value) => {
@@ -115,9 +118,15 @@ export const CurrencySelection = (): React.ReactElement => {
             <Col span={24}>
               <Form.Item
                 help={
-                  formik.touched.amount && formik.errors.amount ? formik.errors.amount : 'You Send'
+                  formik.touched.expectedSendAmount && formik.errors.expectedSendAmount
+                    ? formik.errors.expectedSendAmount
+                    : 'You Send'
                 }
-                validateStatus={formik.touched.amount && formik.errors.amount ? 'error' : 'success'}
+                validateStatus={
+                  formik.touched.expectedSendAmount && formik.errors.expectedSendAmount
+                    ? 'error'
+                    : 'success'
+                }
               >
                 <Input
                   size="large"
@@ -125,7 +134,7 @@ export const CurrencySelection = (): React.ReactElement => {
                   {...formik.getFieldProps('amount')}
                   addonAfter={_LabelSelector({
                     fieldName: 'from',
-                    defaultTicker: formik.values.from,
+                    defaultTicker: formik.values.fromCurrency,
                     currencyList,
                   })}
                 />
@@ -135,13 +144,13 @@ export const CurrencySelection = (): React.ReactElement => {
             <Col span={24}>
               <Form.Item help="You Get">
                 <Input
-                  value={estimate}
+                  value={expectedReceiveAmount}
                   size="large"
                   allowClear
                   disabled
                   addonAfter={_LabelSelector({
                     fieldName: 'to',
-                    defaultTicker: formik.values.to,
+                    defaultTicker: formik.values.toCurrency,
                     currencyList,
                   })}
                 />
@@ -151,21 +160,19 @@ export const CurrencySelection = (): React.ReactElement => {
             <Col span={24}>
               <Row justify="center">
                 <Text>
-                  {`1 ${formik.values.from.toUpperCase()} ~ ${
-                    calculateRate(formik.values.amount, estimate, 1000000) || '...'
-                  } ${formik.values.to.toUpperCase()} Expected Rate`}
+                  {`1 ${formik.values.fromCurrency.toUpperCase()} ~ ${
+                    calculateRate(
+                      formik.values.expectedSendAmount,
+                      expectedReceiveAmount,
+                      1000000,
+                    ) || '...'
+                  } ${formik.values.toCurrency.toUpperCase()} Expected Rate`}
                 </Text>
               </Row>
             </Col>
 
             <Col span={12}>
-              <Button
-                type="primary"
-                htmlType="submit"
-                // shape="round"
-                size="large"
-                style={{ width: '100%' }}
-              >
+              <Button type="primary" htmlType="submit" size="large" style={{ width: '100%' }}>
                 Swap
               </Button>
             </Col>

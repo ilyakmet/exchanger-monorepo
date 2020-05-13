@@ -1,35 +1,39 @@
 import React from 'react';
 
 // Ant Design
-import { Row, Col, Typography, Tag, Button } from 'antd';
+import { Row, Col, Typography, Tag } from 'antd';
 
 // Ant Icons
-import { ArrowDownOutlined } from '@ant-design/icons';
+import { SyncOutlined } from '@ant-design/icons';
 
 // Components
-import { QRCode, CopyToClipboard } from '..';
+import { QRCode } from '..';
 
 // Redux
 import { useSelector } from 'react-redux';
-import {
-  selectAmountFromToEstimateRateAmountTo,
-  selectIsAmountToCopied,
-} from '../../redux/selectors/exchangeForm';
+import { selectOrderData, selectIsAmountToCopied } from '../../redux/selectors/exchangeForm';
 
 // SubComponents
 const { Text } = Typography;
 
 // Utils
-import { shorten } from '../../utils';
+import { breakAddress } from '../../utils';
 
 export const OrderLabelWithQR: React.FC = (): React.ReactElement => {
-  const { amount, from, to, estimate, amountTo } = useSelector(
-    selectAmountFromToEstimateRateAmountTo,
-  );
+  const {
+    expectedSendAmount,
+    expectedReceiveAmount,
+    fromCurrency,
+    toCurrency,
+    payinAddress,
+    payoutAddress,
+    id,
+    status,
+  } = useSelector(selectOrderData);
 
   const isAmountToCopied = useSelector(selectIsAmountToCopied);
 
-  const amountToShorten = shorten(amountTo || '').toLowerCase();
+  console.log({ id, status, isAmountToCopied });
 
   return (
     <Row gutter={[0, 24]}>
@@ -45,83 +49,49 @@ export const OrderLabelWithQR: React.FC = (): React.ReactElement => {
             padding: '1rem',
           }}
         >
-          <Col style={{ border: '1px solid #333', marginRight: '1rem' }}>
+          <Col style={{ marginRight: '1rem' }}>
             <QRCode data="zalupa vam" />
           </Col>
 
           <Col>
-            <Text>Transaction Id: fdd0ded95b2706</Text>
+            <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>Order Id</Text>
+            <br />
+            <Text>fdd0ded95b2706</Text>
+            <br />
+            <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>Status</Text>
+            <br />
+            <Tag icon={<SyncOutlined spin />} color="processing">
+              processing
+            </Tag>
           </Col>
 
           <Col>
-            <Text>You Send</Text>
-
+            <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>You Send</Text>
             <br />
-
-            <Text style={{ fontSize: '1.3rem' }}>0.0000001 BTC</Text>
-
-            <br />
-
-            <Text>To Address</Text>
-
-            <br />
-
-            <Text strong underline style={{ fontSize: '1.3rem', color: '#1890FF' }}>
-              0x493609f7cb6d{'\n'}a4d7783a1936d2{'\n'}8277072c9dcdac
-            </Text>
-          </Col>
-
-          <Col>
-            <Text>You Get</Text>
-
-            <br />
-
-            <Text style={{ fontSize: '1.3rem' }}>0.0000001 BTC</Text>
-
-            <br />
-
-            <Text>To Address</Text>
-
-            <br />
-
             <Text style={{ fontSize: '1.3rem' }}>
-              0x493609f7cb6d{'\n'}a4d7783a1936d2{'\n'}8277072c9dcdac
+              {expectedSendAmount || '...'} {fromCurrency.ticker.toUpperCase()}
             </Text>
+            <br />
+            <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>To Address</Text>
+            <br />
+            <Text strong underline style={{ fontSize: '1.3rem', color: '#1890FF' }}>
+              {breakAddress({ address: payinAddress }) || '...'}
+            </Text>
+          </Col>
+
+          <Col>
+            <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>You Get</Text>
+            <br />
+            <Text style={{ fontSize: '1.3rem' }}>
+              {expectedReceiveAmount || '...'} {toCurrency.ticker.toUpperCase()}
+            </Text>
+            <br />
+            <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>To Address</Text>
+            <br />
+            <Text style={{ fontSize: '1.3rem' }}>{breakAddress({ address: payoutAddress })}</Text>
           </Col>
         </Row>
       </Col>
-
-      {/* <Col span={24}>
-        <Row
-          justify="start"
-          align="middle"
-          gutter={[0, 12]}
-          style={{
-            background: '#FAFAFA',
-            // border: '1px solid #1890FF',
-            borderRadius: '2px',
-            padding: '1rem',
-          }}
-        >
-          <Col>
-            <Text>You Get</Text>
-
-            <br />
-
-            <Text style={{ fontSize: '1.3rem' }}>0.0000001 BTC</Text>
-
-            <br />
-
-            <Text>To Address</Text>
-
-            <br />
-
-            <Text style={{ fontSize: '1.3rem' }}>
-              0x493609f7cb6d{'\n'}a4d7783a1936d2{'\n'}8277072c9dcdac
-            </Text>
-          </Col>
-        </Row>
-      </Col> */}
     </Row>
   );
 };

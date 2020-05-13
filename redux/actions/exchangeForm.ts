@@ -1,97 +1,128 @@
 // Types
 import {
   ReduxActionType,
-  AmountFromToType,
-  CurrenciesListItemType,
-  getEstimateParams,
-  getMinAmountParams,
-  updateAmountToParams,
-  updateEstimateAndEstimatedArrivalParams,
+  SetPayoutAddressParams,
+  SetExpectedSendAmountFromCurrencyToCurrencyParams,
+  SetMinAmountParams,
+  SetCurrencyListParams,
+  SetExpectedReceiveAmountEstimatedArrivalParams,
+  GetMinAmountParams,
+  GetExpectedReceiveAmountParams,
 } from '../../interfaces';
 
-// Actions Types
+// Action Types
 import {
-  _updateMinAmount,
-  _updateMinAmountSaga,
-  _updateAmountFromTo,
-  _updateCurrencyList,
-  _updateCurrencyListSaga,
-  _updateEstimateAndEstimatedArrival,
-  _updateEstimateAndEstimatedArrivalSaga,
   _setIsLoading,
   _incCurrentStep,
   _decCurrentStep,
-  _updateAmountTo,
-  _resetAmountTo,
+  _setPayoutAddress,
+  _resetPayoutAddress,
+  _setExpectedSendAmountFromCurrencyToCurrency,
+  _setMinAmount,
+  _setCurrencyList,
+  _setExpectedReceiveAmountEstimatedArrival,
+  _setMinAmountSaga,
+  _setCurrencyListSaga,
+  _setExpectedReceiveAmountEstimatedArrivalSaga,
 } from '../types/exchangeForm';
 
-// Actions
-export const updateMinAmount = (newMinAmount: number): ReduxActionType<string, number> => ({
-  type: _updateMinAmount,
-  payload: newMinAmount,
-});
-
-export const updateMinAmountSaga = (
-  pair: getMinAmountParams,
-): ReduxActionType<string, getMinAmountParams> => ({
-  type: _updateMinAmountSaga,
-  payload: pair,
-});
-
-export const updateAmountFromTo = (
-  newAmountFromTo: AmountFromToType,
-): ReduxActionType<string, AmountFromToType> => ({
-  type: _updateAmountFromTo,
-  payload: newAmountFromTo,
-});
-
-export const updateCurrencyList = (
-  newCurrencyList: Array<CurrenciesListItemType>,
-): ReduxActionType<string, Array<CurrenciesListItemType>> => ({
-  type: _updateCurrencyList,
-  payload: newCurrencyList,
-});
-
-export const updateCurrencyListSaga = (): ReduxActionType<string, null> => ({
-  type: _updateCurrencyListSaga,
-  payload: null,
-});
-
-export const updateEstimateAndEstimatedArrival = (
-  params: updateEstimateAndEstimatedArrivalParams,
-): ReduxActionType<string, updateEstimateAndEstimatedArrivalParams> => ({
-  type: _updateEstimateAndEstimatedArrival,
-  payload: params,
-});
-
-export const updateEstimateAndEstimatedArrivalSaga = (
-  params: getEstimateParams,
-): ReduxActionType<string, getEstimateParams> => ({
-  type: _updateEstimateAndEstimatedArrivalSaga,
-  payload: params,
-});
-
-export const setIsLoadin = (): ReduxActionType<string, null> => ({
+// Action Creators
+export const setIsLoading = (): ReduxActionType => ({
   type: _setIsLoading,
   payload: null,
 });
 
-export const incCurrentStep = (): ReduxActionType<string, null> => ({
+export const incCurrentStep = (): ReduxActionType => ({
   type: _incCurrentStep,
   payload: null,
 });
 
-export const decCurrentStep = (): ReduxActionType<string, null> => ({
+export const decCurrentStep = (): ReduxActionType => ({
   type: _decCurrentStep,
   payload: null,
 });
 
-export const updateAmountTo = (params: updateAmountToParams): ReduxActionType<string, string> => ({
-  type: _updateAmountTo,
-  payload: params.newAmountTo,
+export const setPayoutAddress = ({
+  payoutAddress,
+}: SetPayoutAddressParams): ReduxActionType<SetPayoutAddressParams> => ({
+  type: _setPayoutAddress,
+  payload: { payoutAddress },
 });
 
-export const resetAmountTo = (): ReduxActionType<string, null> => ({
-  type: _updateAmountTo,
+export const resetPayoutAddress = (): ReduxActionType => ({
+  type: _resetPayoutAddress,
   payload: null,
+});
+
+export const setExpectedSendAmountFromCurrencyToCurrency = ({
+  expectedSendAmount,
+  fromCurrency,
+  toCurrency,
+}: SetExpectedSendAmountFromCurrencyToCurrencyParams): ReduxActionType<
+  SetExpectedSendAmountFromCurrencyToCurrencyParams
+> => ({
+  type: _setExpectedSendAmountFromCurrencyToCurrency,
+  payload: {
+    expectedSendAmount,
+    fromCurrency,
+    toCurrency,
+  },
+});
+
+export const setMinAmount = ({
+  minAmount,
+}: SetMinAmountParams): ReduxActionType<SetMinAmountParams> => ({
+  type: _setMinAmount,
+  payload: { minAmount },
+});
+
+export const setCurrencyList = ({
+  currencyList,
+}: SetCurrencyListParams): ReduxActionType<SetCurrencyListParams> => ({
+  type: _setCurrencyList,
+  payload: {
+    currencyList,
+  },
+});
+
+export const setExpectedReceiveAmountEstimatedArrival = ({
+  expectedReceiveAmount,
+  estimatedArrival,
+}: SetExpectedReceiveAmountEstimatedArrivalParams): ReduxActionType<
+  SetExpectedReceiveAmountEstimatedArrivalParams
+> => ({
+  type: _setExpectedReceiveAmountEstimatedArrival,
+  payload: {
+    expectedReceiveAmount,
+    estimatedArrival,
+  },
+});
+
+export const setMinAmountSaga = ({
+  fromCurrency,
+  toCurrency,
+}: GetMinAmountParams): ReduxActionType<GetMinAmountParams> => ({
+  type: _setMinAmountSaga,
+  payload: {
+    fromCurrency,
+    toCurrency,
+  },
+});
+
+export const setCurrencyListSaga = (): ReduxActionType => ({
+  type: _setCurrencyListSaga,
+  payload: null,
+});
+
+export const setExpectedReceiveAmountEstimatedArrivalSaga = ({
+  expectedSendAmount,
+  fromCurrency,
+  toCurrency,
+}: GetExpectedReceiveAmountParams): ReduxActionType<GetExpectedReceiveAmountParams> => ({
+  type: _setExpectedReceiveAmountEstimatedArrivalSaga,
+  payload: {
+    expectedSendAmount,
+    fromCurrency,
+    toCurrency,
+  },
 });

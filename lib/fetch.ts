@@ -1,24 +1,31 @@
 // Types
-import { getMinAmountParams, getEstimateParams } from '../interfaces';
+import { GetMinAmountParams, GetExpectedReceiveAmountParams } from '../interfaces';
 
 // Axios
 import axios from 'axios';
 
+// Root
 const apiRoot = 'https://changenow.io/api/v1';
 
-export const getMinAmount = async ({ from, to }: getMinAmountParams) => {
-  const response = await axios.get(`${apiRoot}/min-amount/${from}_${to}`);
-  return response.data.minAmount;
+// Methods
+export const getMinAmount = async ({ fromCurrency, toCurrency }: GetMinAmountParams) => {
+  const { data } = await axios.get(`${apiRoot}/min-amount/${fromCurrency}_${toCurrency}`);
+
+  return data;
 };
 
 export const getCurrencyList = async () => {
-  const response = await axios.get(`${apiRoot}/currencies`);
-  return response.data;
+  const { data } = await axios.get(`${apiRoot}/currencies`);
+  return data;
 };
 
-export const getEstimate = async ({ amount, from, to }: getEstimateParams) => {
-  const response = await axios.get(
-    `${apiRoot}/exchange-amount/${amount}/${from}_${to}?api_key=changenow`,
+export const getExpectedReceiveAmount = async ({
+  expectedSendAmount,
+  fromCurrency,
+  toCurrency,
+}: GetExpectedReceiveAmountParams) => {
+  const { data } = await axios.get(
+    `${apiRoot}/exchange-amount/${expectedSendAmount}/${fromCurrency}_${toCurrency}?api_key=changenow`,
   );
-  return response.data;
+  return data;
 };

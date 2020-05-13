@@ -1,29 +1,7 @@
 // You can include shared interfaces/types in a separate file
-// and then use them in any component by importing them. For
-// example, to import the interface below do:
-//
-// import User from 'path/to/interfaces';
+// and then use them in any component by importing them.
 
-export type ReduxActionType<T, A> = {
-  type: T;
-  payload: A;
-};
-
-export type AppLayoutProps = {
-  title?: string;
-};
-
-export type AppStepsProps = {
-  children: any;
-  current: number;
-  marginV: number;
-};
-
-export type Step1Props = {
-  marginV: number;
-};
-
-export type CurrenciesListItemType = {
+export type CurrencyListItemType = {
   ticker: string;
   name: string;
   image: string;
@@ -34,51 +12,67 @@ export type CurrenciesListItemType = {
   supportsFixedRate: boolean;
 };
 
-export type CurrencyLabelType = {
-  ticker: string;
-  image: string;
+// Actions
+export type ReduxActionType<P = null> = {
+  type: string;
+  payload: P;
+};
+
+export type SetPayoutAddressParams = {
+  payoutAddress: string;
+};
+
+export type SetExpectedSendAmountFromCurrencyToCurrencyParams = {
+  expectedSendAmount: number;
+  fromCurrency: string;
+  toCurrency: string;
+};
+
+export type SetMinAmountParams = {
+  minAmount: string;
+};
+
+export type SetCurrencyListParams = {
+  currencyList: Array<CurrencyListItemType>;
+};
+
+export type SetExpectedReceiveAmountEstimatedArrivalParams = {
+  expectedReceiveAmount: number;
+  estimatedArrival: string;
+};
+
+// Lib
+export type GetMinAmountParams = {
+  fromCurrency: string;
+  toCurrency: string;
+};
+
+export type GetExpectedReceiveAmountParams = {
+  expectedSendAmount: number;
+  fromCurrency: string;
+  toCurrency: string;
+};
+
+// Components
+export type AppLayoutProps = {
+  children: any;
+  title?: string;
 };
 
 export type LabelSelectorProps = {
   fieldName: string;
   defaultTicker: string;
-  currencyList: Array<CurrenciesListItemType>;
+  currencyList: Array<CurrencyListItemType>;
 };
 
-export type CurrencySelectionProps = {
-  currencyList: Array<CurrenciesListItemType>;
-};
-
-export type getEstimateParams = {
-  amount: number;
-  from: string;
-  to: string;
-};
-
-export type getMinAmountParams = {
-  from: string;
-  to: string;
-};
-
-export type getMinAmountReturn = {
-  minAmount: number;
-};
-
-export type AmountFromToType = getEstimateParams;
-
-export type updateAmountToParams = {
-  newAmountTo: string;
+export type CurrencyLabelProps = {
+  image: string;
+  ticker: string;
 };
 
 export type StepButtonsProps = {
   rightButtonOnClick?: () => void;
-  leftButtonOnClick: () => void;
+  leftButtonOnClick?: () => void;
   rightButtonName: string;
   leftButtonName: string;
-};
-
-export type updateEstimateAndEstimatedArrivalParams = {
-  estimatedAmount: number;
-  transactionSpeedForecast: string;
-  warningMessage: null | string;
 };

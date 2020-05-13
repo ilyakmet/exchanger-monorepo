@@ -4,17 +4,17 @@ import React from 'react';
 import { Row, Col } from 'antd';
 
 // Components
-import { OrderLabel, RecipientWalletInput } from '..';
+import { ConfirmationOrderLabel, PayoutAddressInput } from '..';
 
 export const Step2: React.FC = () => {
   return (
     <Row justify="center" gutter={[0, { xs: 24, sm: 24, md: 48, lg: 48 }]}>
       <Col xs={24} sm={24} md={20} lg={20}>
-        <OrderLabel />
+        <ConfirmationOrderLabel />
       </Col>
 
       <Col xs={24} sm={24} md={20} lg={20}>
-        <RecipientWalletInput />
+        <PayoutAddressInput />
       </Col>
     </Row>
   );

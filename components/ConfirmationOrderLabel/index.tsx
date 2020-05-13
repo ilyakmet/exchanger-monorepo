@@ -8,7 +8,7 @@ import { ArrowDownOutlined } from '@ant-design/icons';
 
 // Redux
 import { useSelector } from 'react-redux';
-import { selectAmountFromToEstimateRateAmountTo } from '../../redux/selectors/exchangeForm';
+import { selectOrderData } from '../../redux/selectors/exchangeForm';
 
 // SubComponents
 const { Text } = Typography;
@@ -17,12 +17,16 @@ const { Text } = Typography;
 import { calculateRate } from '../../utils';
 import { shorten } from '../../utils';
 
-export const OrderLabel: React.FC = (): React.ReactElement => {
-  const { amount, from, to, estimate, amountTo } = useSelector(
-    selectAmountFromToEstimateRateAmountTo,
-  );
+export const ConfirmationOrderLabel: React.FC = (): React.ReactElement => {
+  const {
+    expectedSendAmount,
+    expectedReceiveAmount,
+    fromCurrency,
+    toCurrency,
+    payoutAddress,
+  } = useSelector(selectOrderData);
 
-  const amountToShorten = shorten(amountTo || '').toLowerCase();
+  const amountToShorten = shorten(payoutAddress || '').toLowerCase();
 
   return (
     <Row
@@ -40,12 +44,13 @@ export const OrderLabel: React.FC = (): React.ReactElement => {
           <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>You Send</Text>
           <br />
           <Text style={{ fontSize: '1.4rem' }}>
-            {amount || '...'} {from.ticker.toUpperCase()}
+            {expectedSendAmount || '...'} {fromCurrency.ticker.toUpperCase()}
           </Text>
           <br />
           <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>
-            1 {from.ticker.toUpperCase()} ~ {calculateRate(amount, estimate, 10000000) || '...'}{' '}
-            {to.ticker.toUpperCase()}
+            1 {fromCurrency.ticker.toUpperCase()} ~{' '}
+            {calculateRate(expectedSendAmount, expectedReceiveAmount, 10000000) || '...'}{' '}
+            {toCurrency.ticker.toUpperCase()}
           </Text>
         </div>
       </Col>
@@ -61,12 +66,12 @@ export const OrderLabel: React.FC = (): React.ReactElement => {
           <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>You Get</Text>
           <br />
           <Text style={{ fontSize: '1.4rem' }}>
-            ≈ {estimate || '...'} {to.ticker.toUpperCase()}
+            ≈ {expectedReceiveAmount || '...'} {toCurrency.ticker.toUpperCase()}
           </Text>
           <br />
           <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>
             {amountToShorten === '...'
-              ? `(Input Your ${to.ticker.toUpperCase()} Address Below)`
+              ? `(Input Your ${toCurrency.ticker.toUpperCase()} Address Below)`
               : amountToShorten}
           </Text>
         </div>

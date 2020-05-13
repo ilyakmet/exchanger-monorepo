@@ -1,54 +1,65 @@
 // Types
-import { ReduxActionType, getEstimateParams, getMinAmountParams } from '../../interfaces';
+import {
+  ReduxActionType,
+  GetMinAmountParams,
+  GetExpectedReceiveAmountParams,
+} from '../../interfaces';
 
 // Redux
 import { takeEvery, put, call } from 'redux-saga/effects';
 
-// Actions Types
+// Action Types
 import {
-  _updateMinAmount,
-  _updateMinAmountSaga,
-  _updateCurrencyList,
-  _updateCurrencyListSaga,
-  _updateEstimateAndEstimatedArrivalSaga,
+  _setMinAmountSaga,
+  _setCurrencyListSaga,
+  _setExpectedReceiveAmountEstimatedArrivalSaga,
 } from '../types/exchangeForm';
 
 // Actions
 import {
-  updateCurrencyList,
-  updateEstimateAndEstimatedArrival,
-  updateMinAmount,
+  setMinAmount,
+  setCurrencyList,
+  setExpectedReceiveAmountEstimatedArrival,
 } from '../actions/exchangeForm';
 
 // Lib
-import { getCurrencyList, getEstimate, getMinAmount } from '../../lib/fetch';
+import { getMinAmount, getCurrencyList, getExpectedReceiveAmount } from '../../lib/fetch';
 
-function* updateCurrencyListSaga() {
-  const currencyList = yield call(getCurrencyList);
-  yield put(updateCurrencyList(currencyList));
+function* setMinAmountSaga({
+  payload: { fromCurrency, toCurrency },
+}: ReduxActionType<GetMinAmountParams>) {
+  const data = yield call(getMinAmount, {
+    fromCurrency,
+    toCurrency,
+  });
+  yield put(setMinAmount(data));
 }
 
-function* updateEstimateAndEstimatedArrivalSaga({
-  payload,
-}: ReduxActionType<string, getEstimateParams>) {
+function* setCurrencyListSaga() {
+  const data = yield call(getCurrencyList);
+  yield put(setCurrencyList(data));
+}
+
+function* setExpectedReceiveAmountEstimatedArrivalSaga({
+  payload: { expectedSendAmount, fromCurrency, toCurrency },
+}: ReduxActionType<GetExpectedReceiveAmountParams>) {
   console.log('updateEstimateSaga');
-  const response = yield call(getEstimate, {
-    amount: payload.amount,
-    from: payload.from,
-    to: payload.to,
+  const data = yield call(getExpectedReceiveAmount, {
+    expectedSendAmount,
+    fromCurrency,
+    toCurrency,
   });
 
-  if (!response.warningMessage) yield put(updateEstimateAndEstimatedArrival(response));
-  // ToDo warningMessage error case
-}
-
-function* updateMinAmountSaga({ payload }: ReduxActionType<string, getMinAmountParams>) {
-  const minAmount = yield call(getMinAmount, { from: payload.from, to: payload.to });
-  yield put(updateMinAmount(minAmount));
+  if (!data.warningMessage) yield put(setExpectedReceiveAmountEstimatedArrival(data));
+  // ToDo: warningMessage error case
 }
 
 export function* exchangeFormWatcherSaga() {
-  yield takeEvery(_updateEstimateAndEstimatedArrivalSaga, updateEstimateAndEstimatedArrivalSaga);
-  yield takeEvery(_updateMinAmountSaga, updateMinAmountSaga);
-  yield takeEvery(_updateCurrencyListSaga, updateCurrencyListSaga);
+  // Sends ActionType {} to Generator
+  yield takeEvery(_setMinAmountSaga, setMinAmountSaga);
+  yield takeEvery(_setCurrencyListSaga, setCurrencyListSaga);
+  yield takeEvery(
+    _setExpectedReceiveAmountEstimatedArrivalSaga,
+    setExpectedReceiveAmountEstimatedArrivalSaga,
+  );
 }

@@ -1,16 +1,20 @@
 // Actions Types
-export const _updateMinAmount = 'ExchangeForm_updateMinAmount';
-export const _updateCurrencyList = 'ExchangeForm_updateCurrencyList';
-export const _updateEstimateAndEstimatedArrival = 'ExchangeForm_updateEstimateAndEstimatedArrival';
-export const _updateAmountFromTo = 'ExchangeForm_updateAmountFromTo';
 export const _setIsLoading = 'ExchangeForm_setIsLoading';
 export const _incCurrentStep = 'ExchangeForm_incCurrentStep';
 export const _decCurrentStep = 'ExchangeForm_decCurrentStep';
-export const _updateAmountTo = 'ExchangeForm_updateAmountTo';
-export const _resetAmountTo = 'ExchangeForm_resetAmountTo';
+export const _setPayoutAddress = 'ExchangeForm_setPayoutAddress';
+export const _resetPayoutAddress = 'ExchangeForm_resetPayoutAddress';
+export const _setExpectedSendAmountFromCurrencyToCurrency =
+  'ExchangeForm_setExpectedSendAmountFromCurrencyToCurrency';
+
+// Sagas Triggers Types
+export const _setMinAmount = 'ExchangeForm_setMinAmount';
+export const _setCurrencyList = 'ExchangeForm_setCurrencyList';
+export const _setExpectedReceiveAmountEstimatedArrival =
+  'ExchangeForm_setExpectedReceiveAmountEstimatedArrival';
 
 // Sagas Types
-export const _updateMinAmountSaga = 'ExchangeForm_updateMinAmountSaga';
-export const _updateCurrencyListSaga = 'ExchangeForm_updateCurrencyListSaga';
-export const _updateEstimateAndEstimatedArrivalSaga =
-  'ExchangeForm_updateEstimateAndEstimatedArrivalSaga';
+export const _setMinAmountSaga = 'ExchangeForm_setMinAmountSaga';
+export const _setCurrencyListSaga = 'ExchangeForm_setCurrencyListSaga';
+export const _setExpectedReceiveAmountEstimatedArrivalSaga =
+  'ExchangeForma_setExpectedReceiveAmountEstimatedArrivalSaga';

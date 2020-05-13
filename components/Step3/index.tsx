@@ -4,14 +4,18 @@ import React from 'react';
 import { Row, Col, Typography } from 'antd';
 
 // Components
-import { OrderLabel, StepButtons } from '..';
+import { ConfirmationOrderLabel, StepButtons } from '..';
 
 // SubComponents
 const { Text } = Typography;
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-import { incCurrentStep, decCurrentStep, resetAmountTo } from '../../redux/actions/exchangeForm';
+import {
+  incCurrentStep,
+  decCurrentStep,
+  resetPayoutAddress,
+} from '../../redux/actions/exchangeForm';
 import { selectEstimatedArrival } from '../../redux/selectors/exchangeForm';
 
 export const Step3: React.FC = () => {
@@ -21,7 +25,7 @@ export const Step3: React.FC = () => {
   return (
     <Row justify="center" gutter={[0, { xs: 24, sm: 24, md: 48, lg: 48 }]}>
       <Col xs={24} sm={24} md={20} lg={20}>
-        <OrderLabel />
+        <ConfirmationOrderLabel />
       </Col>
 
       <Col span={24}>
@@ -38,7 +42,7 @@ export const Step3: React.FC = () => {
           rightButtonOnClick={() => dispatch(incCurrentStep())}
           leftButtonName="Back"
           leftButtonOnClick={() => {
-            dispatch(resetAmountTo());
+            dispatch(resetPayoutAddress());
             dispatch(decCurrentStep());
           }}
         />

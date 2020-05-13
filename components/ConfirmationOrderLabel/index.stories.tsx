@@ -1,16 +1,16 @@
 /* eslint-disable react/self-closing-comp */
 import React from 'react';
 import { Row, Col } from 'antd';
-import { OrderLabel } from '.';
+import { ConfirmationOrderLabel } from '.';
 import { AppLayout } from '../AppLayout';
 
-export default { title: 'OrderLabel' };
+export default { title: 'ConfirmationOrderLabel' };
 
-export const Index = () => <OrderLabel />;
+export const Index = () => <ConfirmationOrderLabel />;
 
 export const WithLayout = () => (
   <AppLayout>
-    <OrderLabel />
+    <ConfirmationOrderLabel />
   </AppLayout>
 );
 
@@ -18,7 +18,7 @@ export const WithLayoutAndGrid = () => (
   <AppLayout>
     <Row justify="center">
       <Col md={20} lg={12}>
-        <OrderLabel />
+        <ConfirmationOrderLabel />
       </Col>
     </Row>
   </AppLayout>

@@ -14,34 +14,34 @@ import * as Yup from 'yup';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-import { incCurrentStep, decCurrentStep, updateAmountTo } from '../../redux/actions/exchangeForm';
-import { selectFromTo } from '../../redux/selectors/exchangeForm';
+import { incCurrentStep, decCurrentStep, setPayoutAddress } from '../../redux/actions/exchangeForm';
+import { selectOrderData } from '../../redux/selectors/exchangeForm';
 
 // Utils
 import { addressRegEx } from '../../utils';
 
-export const RecipientWalletInput = (): React.ReactElement => {
-  const { to } = useSelector(selectFromTo);
+export const PayoutAddressInput = (): React.ReactElement => {
+  const { toCurrency } = useSelector(selectOrderData);
   const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
-      amountTo: '',
+      payoutAddress: '',
     },
     validationSchema: Yup.lazy(() => {
-      const message = `This is not ${to.ticker.toUpperCase()} address`;
+      const message = `This is not ${toCurrency.ticker.toUpperCase()} address`;
 
       return Yup.object().shape({
-        amountTo: Yup.string()
+        payoutAddress: Yup.string()
           .trim()
-          .matches(new RegExp(addressRegEx[to.ticker].regEx), message)
+          .matches(new RegExp(addressRegEx[toCurrency.ticker].regEx), message)
           .required(message)
           .typeError(message),
       });
     }),
     onSubmit: (values) => {
       console.log(values);
-      dispatch(updateAmountTo({ newAmountTo: values.amountTo }));
+      dispatch(setPayoutAddress({ payoutAddress: values.payoutAddress }));
       dispatch(incCurrentStep());
     },
   });
@@ -53,16 +53,16 @@ export const RecipientWalletInput = (): React.ReactElement => {
           <Col span={24}>
             <Form.Item
               help={
-                formik.touched.amountTo && formik.errors.amountTo
-                  ? formik.errors.amountTo
+                formik.touched.payoutAddress && formik.errors.payoutAddress
+                  ? formik.errors.payoutAddress
                   : 'Recipient Wallet'
               }
               validateStatus={
-                formik.touched.amountTo && formik.errors.amountTo ? 'error' : 'success'
+                formik.touched.payoutAddress && formik.errors.payoutAddress ? 'error' : 'success'
               }
             >
               <Input
-                placeholder={`Enter Your ${to.ticker.toUpperCase()} Addres`}
+                placeholder={`Enter Your ${toCurrency.ticker.toUpperCase()} Address`}
                 size="large"
                 allowClear
                 {...formik.getFieldProps('amountTo')}
@@ -74,7 +74,9 @@ export const RecipientWalletInput = (): React.ReactElement => {
             <StepButtons
               rightButtonName="Confirm"
               leftButtonName="Back"
-              leftButtonOnClick={() => dispatch(decCurrentStep())}
+              leftButtonOnClick={() => {
+                dispatch(decCurrentStep());
+              }}
             />
           </Col>
         </Row>

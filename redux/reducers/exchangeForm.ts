@@ -1,38 +1,41 @@
 // Types
 import { ReduxActionType } from '../../interfaces';
 
-// Actions Types
+// Action Types
 import {
-  _updateMinAmount,
-  _updateAmountFromTo,
-  _updateCurrencyList,
   _setIsLoading,
-  _updateEstimateAndEstimatedArrival,
   _incCurrentStep,
   _decCurrentStep,
-  _updateAmountTo,
-  _resetAmountTo,
+  _setPayoutAddress,
+  _resetPayoutAddress,
+  _setExpectedSendAmountFromCurrencyToCurrency,
+  _setMinAmount,
+  _setCurrencyList,
+  _setExpectedReceiveAmountEstimatedArrival,
 } from '../types/exchangeForm';
 
-// Initial state
+// Initial State
 const initialState = {
   currentStep: 0,
-  estimatedArrival: null,
-  isAmountToCopied: true,
   rateMode: 'FLOATING',
-  from: {
+  id: 'fdd0ded95b2706',
+  status: 'exchanging',
+  expectedSendAmount: null,
+  expectedReceiveAmount: null,
+  payinAddress: '1F1tAaz5x1HUXrCNLbtMDqcw6o5GNn4xqX',
+  payoutAddress: null,
+  fromCurrency: {
     ticker: 'btc',
     name: '',
   },
-  to: {
+  toCurrency: {
     ticker: 'eth',
     name: '',
   },
-  amount: null,
-  amountTo: null,
+  estimatedArrival: null,
+  contactEmail: null,
+  isAmountToCopied: true,
   minAmount: 0,
-  estimate: null,
-  rate: null,
   currencyList: [],
   fixedRatePairs: [],
   defaultAmounts: {
@@ -206,35 +209,35 @@ const initialState = {
 };
 
 // Reducer
-export const exchangeForm = (state = initialState, action: ReduxActionType<string, any>) => {
+export const exchangeForm = (state = initialState, action: ReduxActionType<any>) => {
   switch (action.type) {
     case _setIsLoading:
       return { ...state, isLoading: true };
-    case _updateMinAmount:
-      return { ...state, minAmount: action.payload };
-    case _updateCurrencyList:
-      return { ...state, currencyList: action.payload };
-    case _updateEstimateAndEstimatedArrival:
-      return {
-        ...state,
-        estimate: action.payload.estimatedAmount,
-        estimatedArrival: action.payload.transactionSpeedForecast,
-      };
-    case _updateAmountFromTo:
-      return {
-        ...state,
-        amount: action.payload.amount,
-        from: { ticker: action.payload.from, name: '' },
-        to: { ticker: action.payload.to, name: '' },
-      };
     case _incCurrentStep:
       return { ...state, currentStep: state.currentStep + 1 };
     case _decCurrentStep:
       return { ...state, currentStep: state.currentStep - 1 };
-    case _updateAmountTo:
-      return { ...state, amountTo: action.payload };
-    case _resetAmountTo:
-      return { ...state, amountTo: null };
+    case _setPayoutAddress:
+      return { ...state, recipientAddress: action.payload };
+    case _resetPayoutAddress:
+      return { ...state, recipientAddress: null };
+    case _setExpectedSendAmountFromCurrencyToCurrency:
+      return {
+        ...state,
+        expectedSendAmount: action.payload.expectedSendAmount,
+        fromCurrency: { ticker: action.payload.fromCurrency, name: '' },
+        toCurrency: { ticker: action.payload.toCurrency, name: '' },
+      };
+    case _setMinAmount:
+      return { ...state, minAmount: action.payload.minAmount };
+    case _setCurrencyList:
+      return { ...state, currencyList: action.payload.currencyList };
+    case _setExpectedReceiveAmountEstimatedArrival:
+      return {
+        ...state,
+        expectedReceiveAmount: action.payload.expectedReceiveAmount,
+        estimatedArrival: action.payload.estimatedArrival,
+      };
     default:
       return { ...state };
   }
