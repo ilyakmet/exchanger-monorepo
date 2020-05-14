@@ -16,7 +16,7 @@ export const getMinAmount = async ({ fromCurrency, toCurrency }: GetMinAmountPar
 
 export const getCurrencyList = async () => {
   const { data } = await axios.get(`${apiRoot}/currencies`);
-  return data;
+  return { currencyList: data };
 };
 
 export const getExpectedReceiveAmount = async ({

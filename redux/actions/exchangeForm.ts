@@ -80,9 +80,7 @@ export const setCurrencyList = ({
   currencyList,
 }: SetCurrencyListParams): ReduxActionType<SetCurrencyListParams> => ({
   type: _setCurrencyList,
-  payload: {
-    currencyList,
-  },
+  payload: { currencyList },
 });
 
 export const setExpectedReceiveAmountEstimatedArrival = ({

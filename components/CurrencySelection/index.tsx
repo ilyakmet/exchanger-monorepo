@@ -46,6 +46,8 @@ export const CurrencySelection = (): React.ReactElement => {
   const minAmount = useSelector(selectMinAmount);
   const { expectedReceiveAmount, fromCurrency, toCurrency } = useSelector(selectOrderData);
 
+  console.log({ currencyList });
+
   const formik = useFormik({
     initialValues: {
       expectedSendAmount: defaultAmounts[fromCurrency.ticker],
@@ -53,10 +55,13 @@ export const CurrencySelection = (): React.ReactElement => {
       toCurrency: toCurrency.ticker,
     },
     validationSchema: Yup.lazy((values: any) => {
-      const message = `Minimum amount is ${minAmount} ${values.from.toUpperCase()}`;
+      const message = `Minimum amount is ${minAmount} ${values.fromCurrency.toUpperCase()}`;
 
       return Yup.object().shape({
-        amount: Yup.number().required(message).min(minAmount, message).typeError(message),
+        expectedSendAmount: Yup.number()
+          .required(message)
+          .min(minAmount, message)
+          .typeError(message),
       });
     }),
     onSubmit: (values) => {
@@ -131,9 +136,9 @@ export const CurrencySelection = (): React.ReactElement => {
                 <Input
                   size="large"
                   allowClear
-                  {...formik.getFieldProps('amount')}
+                  {...formik.getFieldProps('expectedSendAmount')}
                   addonAfter={_LabelSelector({
-                    fieldName: 'from',
+                    fieldName: 'fromCurrency',
                     defaultTicker: formik.values.fromCurrency,
                     currencyList,
                   })}
@@ -149,7 +154,7 @@ export const CurrencySelection = (): React.ReactElement => {
                   allowClear
                   disabled
                   addonAfter={_LabelSelector({
-                    fieldName: 'to',
+                    fieldName: 'toCurrency',
                     defaultTicker: formik.values.toCurrency,
                     currencyList,
                   })}
@@ -179,9 +184,7 @@ export const CurrencySelection = (): React.ReactElement => {
           </Row>
         </Form>
       ) : (
-        <div>
-          <img src="https://cultofthepartyparrot.com/parrots/hd/parrot.gif" />
-        </div>
+        123
       )}
     </>
   );

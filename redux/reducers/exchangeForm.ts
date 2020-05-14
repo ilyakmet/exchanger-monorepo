@@ -218,7 +218,7 @@ export const exchangeForm = (state = initialState, action: ReduxActionType<any>)
     case _decCurrentStep:
       return { ...state, currentStep: state.currentStep - 1 };
     case _setPayoutAddress:
-      return { ...state, recipientAddress: action.payload };
+      return { ...state, payoutAddress: action.payload.payoutAddress };
     case _resetPayoutAddress:
       return { ...state, recipientAddress: null };
     case _setExpectedSendAmountFromCurrencyToCurrency:

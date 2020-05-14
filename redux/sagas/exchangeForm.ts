@@ -43,14 +43,22 @@ function* setCurrencyListSaga() {
 function* setExpectedReceiveAmountEstimatedArrivalSaga({
   payload: { expectedSendAmount, fromCurrency, toCurrency },
 }: ReduxActionType<GetExpectedReceiveAmountParams>) {
-  console.log('updateEstimateSaga');
-  const data = yield call(getExpectedReceiveAmount, {
-    expectedSendAmount,
-    fromCurrency,
-    toCurrency,
-  });
+  const { estimatedAmount, transactionSpeedForecast, warningMessage } = yield call(
+    getExpectedReceiveAmount,
+    {
+      expectedSendAmount,
+      fromCurrency,
+      toCurrency,
+    },
+  );
 
-  if (!data.warningMessage) yield put(setExpectedReceiveAmountEstimatedArrival(data));
+  if (!warningMessage)
+    yield put(
+      setExpectedReceiveAmountEstimatedArrival({
+        expectedReceiveAmount: estimatedAmount,
+        estimatedArrival: transactionSpeedForecast,
+      }),
+    );
   // ToDo: warningMessage error case
 }
 

@@ -65,7 +65,7 @@ export const OrderLabelWithQR: React.FC = (): React.ReactElement => {
             </Tag>
           </Col>
 
-          <Col>
+          <Col xs={12} sm={24} md={24} lg={24}>
             <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>You Send</Text>
             <br />
             <Text style={{ fontSize: '1.3rem' }}>
@@ -79,7 +79,7 @@ export const OrderLabelWithQR: React.FC = (): React.ReactElement => {
             </Text>
           </Col>
 
-          <Col>
+          <Col xs={24} sm={24} md={24} lg={24}>
             <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>You Get</Text>
             <br />
             <Text style={{ fontSize: '1.3rem' }}>

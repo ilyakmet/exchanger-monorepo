@@ -65,7 +65,7 @@ export const PayoutAddressInput = (): React.ReactElement => {
                 placeholder={`Enter Your ${toCurrency.ticker.toUpperCase()} Address`}
                 size="large"
                 allowClear
-                {...formik.getFieldProps('amountTo')}
+                {...formik.getFieldProps('payoutAddress')}
               />
             </Form.Item>
           </Col>

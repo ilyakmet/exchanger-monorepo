@@ -6,11 +6,17 @@ import { AppLayout } from '../AppLayout';
 
 export default { title: 'CopyToClipboard' };
 
-export const Index = () => <CopyToClipboard />;
+export const Index = () => (
+  <CopyToClipboard text="test" onCopy={() => {}}>
+    {' '}
+  </CopyToClipboard>
+);
 
 export const WithLayout = () => (
   <AppLayout>
-    <CopyToClipboard />
+    <CopyToClipboard text="test" onCopy={() => {}}>
+      {' '}
+    </CopyToClipboard>
   </AppLayout>
 );
 
@@ -18,7 +24,9 @@ export const WithLayoutAndGrid = () => (
   <AppLayout>
     <Row justify="center">
       <Col md={20} lg={12}>
-        <CopyToClipboard />
+        <CopyToClipboard text="test" onCopy={() => {}}>
+          {' '}
+        </CopyToClipboard>
       </Col>
     </Row>
   </AppLayout>

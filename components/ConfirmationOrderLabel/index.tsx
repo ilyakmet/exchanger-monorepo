@@ -15,7 +15,7 @@ const { Text } = Typography;
 
 // Utils
 import { calculateRate } from '../../utils';
-import { shorten } from '../../utils';
+import { breakAddress } from '../../utils';
 
 export const ConfirmationOrderLabel: React.FC = (): React.ReactElement => {
   const {
@@ -26,7 +26,7 @@ export const ConfirmationOrderLabel: React.FC = (): React.ReactElement => {
     payoutAddress,
   } = useSelector(selectOrderData);
 
-  const amountToShorten = shorten(payoutAddress || '').toLowerCase();
+  const splitedPayoutAddress = breakAddress({ address: payoutAddress || '' }).toLowerCase();
 
   return (
     <Row
@@ -70,9 +70,9 @@ export const ConfirmationOrderLabel: React.FC = (): React.ReactElement => {
           </Text>
           <br />
           <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>
-            {amountToShorten === '...'
+            {splitedPayoutAddress === '...'
               ? `(Input Your ${toCurrency.ticker.toUpperCase()} Address Below)`
-              : amountToShorten}
+              : splitedPayoutAddress}
           </Text>
         </div>
       </Col>
