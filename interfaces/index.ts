@@ -36,6 +36,15 @@ export type SetCurrencyListParams = {
   currencyList: Array<CurrencyListItemType>;
 };
 
+export type SetOrderParams = {
+  payinAddress: string;
+  payoutAddress: string;
+  fromCurrency: string;
+  toCurrency: string;
+  id: string;
+  expectedReceiveAmount: number;
+};
+
 export type SetExpectedReceiveAmountEstimatedArrivalParams = {
   expectedReceiveAmount: number;
   estimatedArrival: string;
@@ -51,6 +60,18 @@ export type GetExpectedReceiveAmountParams = {
   expectedSendAmount: number;
   fromCurrency: string;
   toCurrency: string;
+};
+
+export type PostOrderParams = {
+  fromCurrency: string;
+  toCurrency: string;
+  payoutAddress: string;
+  expectedSendAmount: string;
+  extraId?: string;
+  userId?: string;
+  contactEmail?: string;
+  refundAddress?: string;
+  refundExtraId?: string;
 };
 
 // Components

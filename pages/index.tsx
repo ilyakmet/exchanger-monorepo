@@ -9,7 +9,7 @@ import { AppLayout, AppSteps, Step1, Step2, Step3, Step4 } from '../components';
 const Index = () => (
   <AppLayout title="Exchanger">
     <Row justify="center">
-      <Col xs={24} sm={24} md={18} lg={12}>
+      <Col xs={24} sm={24} md={18} lg={10}>
         <AppSteps>
           <Step1 />
           <Step2 />

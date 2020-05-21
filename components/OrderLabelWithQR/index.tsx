@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // Ant Design
 import { Row, Col, Typography, Tag } from 'antd';
@@ -10,7 +10,8 @@ import { SyncOutlined } from '@ant-design/icons';
 import { QRCode } from '..';
 
 // Redux
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setOrderSaga } from '../../redux/actions/exchangeForm';
 import { selectOrderData, selectIsAmountToCopied } from '../../redux/selectors/exchangeForm';
 
 // SubComponents
@@ -20,6 +21,7 @@ const { Text } = Typography;
 import { breakAddress } from '../../utils';
 
 export const OrderLabelWithQR: React.FC = (): React.ReactElement => {
+  const dispatch = useDispatch();
   const {
     expectedSendAmount,
     expectedReceiveAmount,
@@ -33,7 +35,18 @@ export const OrderLabelWithQR: React.FC = (): React.ReactElement => {
 
   const isAmountToCopied = useSelector(selectIsAmountToCopied);
 
-  console.log({ id, status, isAmountToCopied });
+  console.log({ isAmountToCopied });
+
+  useEffect(() => {
+    dispatch(
+      setOrderSaga({
+        fromCurrency: fromCurrency.ticker,
+        toCurrency: toCurrency.ticker,
+        payoutAddress,
+        expectedSendAmount,
+      }),
+    );
+  }, []);
 
   return (
     <Row gutter={[0, 24]}>
@@ -50,18 +63,18 @@ export const OrderLabelWithQR: React.FC = (): React.ReactElement => {
           }}
         >
           <Col style={{ marginRight: '1rem' }}>
-            <QRCode data="zalupa vam" />
+            <QRCode data={payinAddress || ' '} />
           </Col>
 
           <Col>
-            <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>Order Id</Text>
+            <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>Id</Text>
             <br />
-            <Text>fdd0ded95b2706</Text>
+            <Text>{id}</Text>
             <br />
             <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>Status</Text>
             <br />
             <Tag icon={<SyncOutlined spin />} color="processing">
-              processing
+              {status}
             </Tag>
           </Col>
 
@@ -75,7 +88,7 @@ export const OrderLabelWithQR: React.FC = (): React.ReactElement => {
             <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>To Address</Text>
             <br />
             <Text strong underline style={{ fontSize: '1.3rem', color: '#1890FF' }}>
-              {breakAddress({ address: payinAddress }) || '...'}
+              {breakAddress({ address: payinAddress || ' ' }) || '...'}
             </Text>
           </Col>
 

@@ -11,6 +11,7 @@ import {
   _setExpectedSendAmountFromCurrencyToCurrency,
   _setMinAmount,
   _setCurrencyList,
+  _setOrder,
   _setExpectedReceiveAmountEstimatedArrival,
 } from '../types/exchangeForm';
 
@@ -18,11 +19,11 @@ import {
 const initialState = {
   currentStep: 0,
   rateMode: 'FLOATING',
-  id: 'fdd0ded95b2706',
-  status: 'exchanging',
+  id: null,
+  status: 'Awaiting Deposit',
   expectedSendAmount: null,
   expectedReceiveAmount: null,
-  payinAddress: '1F1tAaz5x1HUXrCNLbtMDqcw6o5GNn4xqX',
+  payinAddress: null,
   payoutAddress: null,
   fromCurrency: {
     ticker: 'btc',
@@ -232,6 +233,17 @@ export const exchangeForm = (state = initialState, action: ReduxActionType<any>)
       return { ...state, minAmount: action.payload.minAmount };
     case _setCurrencyList:
       return { ...state, currencyList: action.payload.currencyList };
+    case _setOrder:
+      console.log('_setOrder: ', action.payload);
+      return {
+        ...state,
+        payinAddress: action.payload.payinAddress,
+        payoutAddress: action.payload.payoutAddress,
+        fromCurrency: { ticker: action.payload.fromCurrency, name: '' },
+        toCurrency: { ticker: action.payload.toCurrency, name: '' },
+        id: action.payload.id,
+        expectedReceiveAmount: action.payload.expectedReceiveAmount,
+      };
     case _setExpectedReceiveAmountEstimatedArrival:
       return {
         ...state,

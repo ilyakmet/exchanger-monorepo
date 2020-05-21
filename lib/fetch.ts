@@ -1,5 +1,5 @@
 // Types
-import { GetMinAmountParams, GetExpectedReceiveAmountParams } from '../interfaces';
+import { GetMinAmountParams, GetExpectedReceiveAmountParams, PostOrderParams } from '../interfaces';
 
 // Axios
 import axios from 'axios';
@@ -28,4 +28,29 @@ export const getExpectedReceiveAmount = async ({
     `${apiRoot}/exchange-amount/${expectedSendAmount}/${fromCurrency}_${toCurrency}?api_key=changenow`,
   );
   return data;
+};
+
+export const postOrder = async ({
+  fromCurrency,
+  toCurrency,
+  payoutAddress,
+  expectedSendAmount,
+}: PostOrderParams) => {
+  const { data } = await axios.post(`${apiRoot}/transactions/changenow`, {
+    from: fromCurrency,
+    to: toCurrency,
+    address: payoutAddress,
+    amount: expectedSendAmount,
+  });
+
+  console.log('postOrder: ', data);
+
+  return {
+    payinAddress: data.payinAddress,
+    payoutAddress: data.payoutAddress,
+    fromCurrency: data.fromCurrency,
+    toCurrency: data.toCurrency,
+    id: data.id,
+    expectedReceiveAmount: parseFloat(data.amount),
+  };
 };

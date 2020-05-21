@@ -2,6 +2,7 @@
 import {
   ReduxActionType,
   GetMinAmountParams,
+  PostOrderParams,
   GetExpectedReceiveAmountParams,
 } from '../../interfaces';
 
@@ -12,6 +13,7 @@ import { takeEvery, put, call } from 'redux-saga/effects';
 import {
   _setMinAmountSaga,
   _setCurrencyListSaga,
+  _setOrderSaga,
   _setExpectedReceiveAmountEstimatedArrivalSaga,
 } from '../types/exchangeForm';
 
@@ -19,11 +21,17 @@ import {
 import {
   setMinAmount,
   setCurrencyList,
+  setOrder,
   setExpectedReceiveAmountEstimatedArrival,
 } from '../actions/exchangeForm';
 
 // Lib
-import { getMinAmount, getCurrencyList, getExpectedReceiveAmount } from '../../lib/fetch';
+import {
+  getMinAmount,
+  getCurrencyList,
+  getExpectedReceiveAmount,
+  postOrder,
+} from '../../lib/fetch';
 
 function* setMinAmountSaga({
   payload: { fromCurrency, toCurrency },
@@ -38,6 +46,14 @@ function* setMinAmountSaga({
 function* setCurrencyListSaga() {
   const data = yield call(getCurrencyList);
   yield put(setCurrencyList(data));
+}
+
+function* setOrderSaga({ payload }: ReduxActionType<PostOrderParams>) {
+  console.log('setOrderSaga1:', payload);
+  const data = yield call(postOrder, { ...payload });
+
+  console.log('setOrderSaga2: ', data);
+  yield put(setOrder(data));
 }
 
 function* setExpectedReceiveAmountEstimatedArrivalSaga({
@@ -66,6 +82,7 @@ export function* exchangeFormWatcherSaga() {
   // Sends ActionType {} to Generator
   yield takeEvery(_setMinAmountSaga, setMinAmountSaga);
   yield takeEvery(_setCurrencyListSaga, setCurrencyListSaga);
+  yield takeEvery(_setOrderSaga, setOrderSaga);
   yield takeEvery(
     _setExpectedReceiveAmountEstimatedArrivalSaga,
     setExpectedReceiveAmountEstimatedArrivalSaga,

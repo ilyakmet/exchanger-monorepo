@@ -7,7 +7,9 @@ import {
   SetCurrencyListParams,
   SetExpectedReceiveAmountEstimatedArrivalParams,
   GetMinAmountParams,
+  SetOrderParams,
   GetExpectedReceiveAmountParams,
+  PostOrderParams,
 } from '../../interfaces';
 
 // Action Types
@@ -17,12 +19,14 @@ import {
   _decCurrentStep,
   _setPayoutAddress,
   _resetPayoutAddress,
+  _setOrder,
   _setExpectedSendAmountFromCurrencyToCurrency,
   _setMinAmount,
   _setCurrencyList,
   _setExpectedReceiveAmountEstimatedArrival,
   _setMinAmountSaga,
   _setCurrencyListSaga,
+  _setOrderSaga,
   _setExpectedReceiveAmountEstimatedArrivalSaga,
 } from '../types/exchangeForm';
 
@@ -83,6 +87,25 @@ export const setCurrencyList = ({
   payload: { currencyList },
 });
 
+export const setOrder = ({
+  payinAddress,
+  payoutAddress,
+  fromCurrency,
+  toCurrency,
+  id,
+  expectedReceiveAmount,
+}: SetOrderParams): ReduxActionType<SetOrderParams> => ({
+  type: _setOrder,
+  payload: {
+    payinAddress,
+    payoutAddress,
+    fromCurrency,
+    toCurrency,
+    id,
+    expectedReceiveAmount,
+  },
+});
+
 export const setExpectedReceiveAmountEstimatedArrival = ({
   expectedReceiveAmount,
   estimatedArrival,
@@ -110,6 +133,21 @@ export const setMinAmountSaga = ({
 export const setCurrencyListSaga = (): ReduxActionType => ({
   type: _setCurrencyListSaga,
   payload: null,
+});
+
+export const setOrderSaga = ({
+  fromCurrency,
+  toCurrency,
+  payoutAddress,
+  expectedSendAmount,
+}: PostOrderParams): ReduxActionType<PostOrderParams> => ({
+  type: _setOrderSaga,
+  payload: {
+    fromCurrency,
+    toCurrency,
+    payoutAddress,
+    expectedSendAmount,
+  },
 });
 
 export const setExpectedReceiveAmountEstimatedArrivalSaga = ({
