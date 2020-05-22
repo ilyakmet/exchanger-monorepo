@@ -3,9 +3,6 @@ import React, { useEffect } from 'react';
 // Ant Design
 import { Row, Col, Typography, Tag } from 'antd';
 
-// Ant Icons
-import { SyncOutlined } from '@ant-design/icons';
-
 // Components
 import { QRCode, CopyToClipboard, OrderStatusTag } from '..';
 
@@ -34,7 +31,6 @@ export const OrderLabelWithQR: React.FC = (): React.ReactElement => {
     payinAddress,
     payoutAddress,
     id,
-    status,
   } = useSelector(selectOrderData);
 
   const isPayinAddressCopied = useSelector(selectIsPayinAddressCopied);
