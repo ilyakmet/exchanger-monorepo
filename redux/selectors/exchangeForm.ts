@@ -26,4 +26,4 @@ export const selectCurrencyList = (state: any) => state.exchangeForm.currencyLis
 export const selectdefaultAmounts = (state: any) => state.exchangeForm.defaultAmounts;
 export const selectMinAmount = (state: any) => state.exchangeForm.minAmount;
 export const selectEstimatedArrival = (state: any) => state.exchangeForm.estimatedArrival;
-export const selectIsAmountToCopied = (state: any) => state.exchangeForm.isAmountToCopied;
+export const selectIsPayinAddressCopied = (state: any) => state.exchangeForm.isPayinAddressCopied;

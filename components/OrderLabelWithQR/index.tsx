@@ -7,12 +7,16 @@ import { Row, Col, Typography, Tag } from 'antd';
 import { SyncOutlined } from '@ant-design/icons';
 
 // Components
-import { QRCode } from '..';
+import { QRCode, CopyToClipboard, OrderStatusTag } from '..';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-import { setOrderSaga } from '../../redux/actions/exchangeForm';
-import { selectOrderData, selectIsAmountToCopied } from '../../redux/selectors/exchangeForm';
+import {
+  setOrderSaga,
+  setTrueForIsPayinAddressCopied,
+  setFalseForIsPayinAddressCopied,
+} from '../../redux/actions/exchangeForm';
+import { selectOrderData, selectIsPayinAddressCopied } from '../../redux/selectors/exchangeForm';
 
 // SubComponents
 const { Text } = Typography;
@@ -33,9 +37,7 @@ export const OrderLabelWithQR: React.FC = (): React.ReactElement => {
     status,
   } = useSelector(selectOrderData);
 
-  const isAmountToCopied = useSelector(selectIsAmountToCopied);
-
-  console.log({ isAmountToCopied });
+  const isPayinAddressCopied = useSelector(selectIsPayinAddressCopied);
 
   useEffect(() => {
     dispatch(
@@ -73,9 +75,7 @@ export const OrderLabelWithQR: React.FC = (): React.ReactElement => {
             <br />
             <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>Status</Text>
             <br />
-            <Tag icon={<SyncOutlined spin />} color="processing">
-              {status}
-            </Tag>
+            <OrderStatusTag />
           </Col>
 
           <Col xs={12} sm={24} md={24} lg={24}>
@@ -85,11 +85,20 @@ export const OrderLabelWithQR: React.FC = (): React.ReactElement => {
               {expectedSendAmount || '...'} {fromCurrency.ticker.toUpperCase()}
             </Text>
             <br />
-            <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>To Address</Text>
+            <Text style={{ fontSize: '0.825rem', opacity: '0.5' }}>To Address </Text>
+            {isPayinAddressCopied ? <Tag color="#1890FF">Copied!</Tag> : null}
             <br />
-            <Text strong underline style={{ fontSize: '1.3rem', color: '#1890FF' }}>
-              {breakAddress({ address: payinAddress || ' ' }) || '...'}
-            </Text>
+            <CopyToClipboard
+              text={payinAddress}
+              onCopy={() => {
+                dispatch(setTrueForIsPayinAddressCopied());
+                setTimeout(() => dispatch(setFalseForIsPayinAddressCopied()), 3000);
+              }}
+            >
+              <Text strong underline style={{ fontSize: '1.3rem', color: '#1890FF' }}>
+                {breakAddress({ address: payinAddress || ' ' }) || '...'}
+              </Text>
+            </CopyToClipboard>
           </Col>
 
           <Col xs={24} sm={24} md={24} lg={24}>

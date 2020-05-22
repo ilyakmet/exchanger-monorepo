@@ -13,6 +13,8 @@ import {
   _setCurrencyList,
   _setOrder,
   _setExpectedReceiveAmountEstimatedArrival,
+  _setTrueForIsPayinAddressCopied,
+  _setFalseForIsPayinAddressCopied,
 } from '../types/exchangeForm';
 
 // Initial State
@@ -20,7 +22,7 @@ const initialState = {
   currentStep: 0,
   rateMode: 'FLOATING',
   id: null,
-  status: 'Awaiting Deposit',
+  status: 'waiting',
   expectedSendAmount: null,
   expectedReceiveAmount: null,
   payinAddress: null,
@@ -35,7 +37,7 @@ const initialState = {
   },
   estimatedArrival: null,
   contactEmail: null,
-  isAmountToCopied: true,
+  isPayinAddressCopied: false,
   minAmount: 0,
   currencyList: [],
   fixedRatePairs: [],
@@ -249,6 +251,16 @@ export const exchangeForm = (state = initialState, action: ReduxActionType<any>)
         ...state,
         expectedReceiveAmount: action.payload.expectedReceiveAmount,
         estimatedArrival: action.payload.estimatedArrival,
+      };
+    case _setTrueForIsPayinAddressCopied:
+      return {
+        ...state,
+        isPayinAddressCopied: true,
+      };
+    case _setFalseForIsPayinAddressCopied:
+      return {
+        ...state,
+        isPayinAddressCopied: false,
       };
     default:
       return { ...state };

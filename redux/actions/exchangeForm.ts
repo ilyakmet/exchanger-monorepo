@@ -28,6 +28,8 @@ import {
   _setCurrencyListSaga,
   _setOrderSaga,
   _setExpectedReceiveAmountEstimatedArrivalSaga,
+  _setTrueForIsPayinAddressCopied,
+  _setFalseForIsPayinAddressCopied,
 } from '../types/exchangeForm';
 
 // Action Creators
@@ -161,4 +163,14 @@ export const setExpectedReceiveAmountEstimatedArrivalSaga = ({
     fromCurrency,
     toCurrency,
   },
+});
+
+export const setTrueForIsPayinAddressCopied = (): ReduxActionType => ({
+  type: _setTrueForIsPayinAddressCopied,
+  payload: null,
+});
+
+export const setFalseForIsPayinAddressCopied = (): ReduxActionType => ({
+  type: _setFalseForIsPayinAddressCopied,
+  payload: null,
 });

@@ -9,6 +9,7 @@ export { PayoutAddressInput } from './PayoutAddressInput';
 export { StepButtons } from './StepButtons';
 export { OrderLabelWithQR } from './OrderLabelWithQR';
 export { CopyToClipboard } from './CopyToClipboard';
+export { OrderStatusTag } from './OrderStatusTag';
 export { QRCode } from './QRCode';
 export { Step1 } from './Step1';
 export { Step2 } from './Step2';
