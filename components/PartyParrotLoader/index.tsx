@@ -9,7 +9,7 @@ import { Row, Col } from 'antd';
 // Utils
 import { parrotNames } from '../../utils';
 
-const rootApi = 'https://cultofthepartyparrot.com/parrots/hd';
+const rootApi = '/partyparrot';
 
 export const PartyParrotLoader: React.FC<{
   children?: any;
