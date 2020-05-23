@@ -84,6 +84,10 @@ export type PostOrderParams = {
   refundExtraId?: string;
 };
 
+export type GetOrderUpdates = {
+  id: string;
+};
+
 // Components
 export type AppLayoutProps = {
   children: any;
