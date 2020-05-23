@@ -13,7 +13,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 // Components
-import { CurrencyLabel, PartyParrotLoader } from '..';
+import { CurrencyLabel } from '..';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -30,7 +30,6 @@ import {
   selectOrderData,
   selectdefaultAmounts,
   selectMinAmount,
-  selectIsLoading,
 } from '../../redux/selectors/exchangeForm';
 
 // Utils
@@ -46,7 +45,6 @@ export const CurrencySelection = (): React.ReactElement => {
   const defaultAmounts = useSelector(selectdefaultAmounts);
   const minAmount = useSelector(selectMinAmount);
   const { expectedReceiveAmount, fromCurrency, toCurrency } = useSelector(selectOrderData);
-  // const isLoading = useSelector(selectIsLoading);
 
   console.log({ currencyList });
 
