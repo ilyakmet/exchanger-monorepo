@@ -8,6 +8,7 @@ export { ConfirmationOrderLabel } from './ConfirmationOrderLabel';
 export { PayoutAddressInput } from './PayoutAddressInput';
 export { StepButtons } from './StepButtons';
 export { OrderLabelWithQR } from './OrderLabelWithQR';
+export { PartyParrotLoader } from './PartyParrotLoader';
 export { CopyToClipboard } from './CopyToClipboard';
 export { OrderStatusTag } from './OrderStatusTag';
 export { QRCode } from './QRCode';

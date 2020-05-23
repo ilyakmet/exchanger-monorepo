@@ -10,8 +10,6 @@
 - Typescript
 - React
 - Ant Design
-- Styled Components
-- Bootstrap 4
 - Formik
 - Yup
 - Redux
@@ -39,7 +37,7 @@ $ yarn lint
 
 ```bash
 $ yarn build
-$ yarn start
+$ yarn start -p <$PORT>
 ```
 
 ## Storybook

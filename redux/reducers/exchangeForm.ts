@@ -12,6 +12,7 @@ import {
   _setMinAmount,
   _setCurrencyList,
   _setOrder,
+  _updateOrder,
   _setExpectedReceiveAmountEstimatedArrival,
   _setTrueForIsPayinAddressCopied,
   _setFalseForIsPayinAddressCopied,
@@ -204,7 +205,7 @@ const initialState = {
   },
   currencyFromSearchString: '',
   currencyToSearchString: '',
-  isLoading: false,
+  isLoading: true,
   autoFocusAmountField: true,
   isAmountFieldFocused: true,
   amountFieldWarning: null,
@@ -245,6 +246,20 @@ export const exchangeForm = (state = initialState, action: ReduxActionType<any>)
         toCurrency: { ticker: action.payload.toCurrency, name: '' },
         id: action.payload.id,
         expectedReceiveAmount: action.payload.expectedReceiveAmount,
+      };
+    case _updateOrder:
+      console.log('_updateOrder: ', action.payload);
+      return {
+        ...state,
+        payinAddress: action.payload.payinAddress,
+        payoutAddress: action.payload.payoutAddress,
+        fromCurrency: { ticker: action.payload.fromCurrency, name: '' },
+        toCurrency: { ticker: action.payload.toCurrency, name: '' },
+        id: action.payload.id,
+        expectedReceiveAmount: action.payload.expectedReceiveAmount,
+        status: action.payload.status,
+        currentStep:
+          action.payload.status === 'finished' ? state.currentStep + 1 : state.currentStep,
       };
     case _setExpectedReceiveAmountEstimatedArrival:
       return {

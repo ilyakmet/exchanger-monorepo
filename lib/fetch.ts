@@ -1,5 +1,10 @@
 // Types
-import { GetMinAmountParams, GetExpectedReceiveAmountParams, PostOrderParams } from '../interfaces';
+import {
+  GetMinAmountParams,
+  GetExpectedReceiveAmountParams,
+  PostOrderParams,
+  GetOrderUpdates,
+} from '../interfaces';
 
 // Axios
 import axios from 'axios';
@@ -53,4 +58,9 @@ export const postOrder = async ({
     id: data.id,
     expectedReceiveAmount: parseFloat(data.amount),
   };
+};
+
+export const getOrderUpdates = async ({ id }: GetOrderUpdates) => {
+  const { data } = await axios.get(`${apiRoot}/transactions/${id}/changenow`);
+  return data;
 };

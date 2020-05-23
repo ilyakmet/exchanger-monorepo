@@ -45,6 +45,16 @@ export type SetOrderParams = {
   expectedReceiveAmount: number;
 };
 
+export type UpdateOrderParams = {
+  payinAddress: string;
+  payoutAddress: string;
+  fromCurrency: string;
+  toCurrency: string;
+  id: string;
+  expectedReceiveAmount: number;
+  status: string;
+};
+
 export type SetExpectedReceiveAmountEstimatedArrivalParams = {
   expectedReceiveAmount: number;
   estimatedArrival: string;

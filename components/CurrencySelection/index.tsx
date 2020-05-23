@@ -13,7 +13,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 // Components
-import { CurrencyLabel } from '..';
+import { CurrencyLabel, PartyParrotLoader } from '..';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -30,6 +30,7 @@ import {
   selectOrderData,
   selectdefaultAmounts,
   selectMinAmount,
+  selectIsLoading,
 } from '../../redux/selectors/exchangeForm';
 
 // Utils
@@ -45,6 +46,7 @@ export const CurrencySelection = (): React.ReactElement => {
   const defaultAmounts = useSelector(selectdefaultAmounts);
   const minAmount = useSelector(selectMinAmount);
   const { expectedReceiveAmount, fromCurrency, toCurrency } = useSelector(selectOrderData);
+  // const isLoading = useSelector(selectIsLoading);
 
   console.log({ currencyList });
 
@@ -117,75 +119,71 @@ export const CurrencySelection = (): React.ReactElement => {
 
   return (
     <>
-      {currencyList.length ? (
-        <Form onFinish={() => formik.handleSubmit()}>
-          <Row justify="center" gutter={[0, 12]}>
-            <Col span={24}>
-              <Form.Item
-                help={
-                  formik.touched.expectedSendAmount && formik.errors.expectedSendAmount
-                    ? formik.errors.expectedSendAmount
-                    : 'You Send'
-                }
-                validateStatus={
-                  formik.touched.expectedSendAmount && formik.errors.expectedSendAmount
-                    ? 'error'
-                    : 'success'
-                }
-              >
-                <Input
-                  size="large"
-                  allowClear
-                  {...formik.getFieldProps('expectedSendAmount')}
-                  addonAfter={_LabelSelector({
-                    fieldName: 'fromCurrency',
-                    defaultTicker: formik.values.fromCurrency,
-                    currencyList,
-                  })}
-                />
-              </Form.Item>
-            </Col>
+      <Form onFinish={() => formik.handleSubmit()}>
+        <Row justify="center" gutter={[0, 12]}>
+          <Col span={24}>
+            <Form.Item
+              help={
+                formik.touched.expectedSendAmount && formik.errors.expectedSendAmount
+                  ? formik.errors.expectedSendAmount
+                  : 'You Send'
+              }
+              validateStatus={
+                formik.touched.expectedSendAmount && formik.errors.expectedSendAmount
+                  ? 'error'
+                  : 'success'
+              }
+            >
+              <Input
+                size="large"
+                allowClear
+                {...formik.getFieldProps('expectedSendAmount')}
+                addonAfter={_LabelSelector({
+                  fieldName: 'fromCurrency',
+                  defaultTicker: formik.values.fromCurrency,
+                  currencyList,
+                })}
+              />
+            </Form.Item>
+          </Col>
 
-            <Col span={24}>
-              <Form.Item help="You Get">
-                <Input
-                  value={expectedReceiveAmount}
-                  size="large"
-                  allowClear
-                  disabled
-                  addonAfter={_LabelSelector({
-                    fieldName: 'toCurrency',
-                    defaultTicker: formik.values.toCurrency,
-                    currencyList,
-                  })}
-                />
-              </Form.Item>
-            </Col>
+          <Col span={24}>
+            <Form.Item help="You Get">
+              <Input
+                // prefix={
+                //   expectedReceiveAmount ? <PartyParrotLoader size="20px" /> : expectedReceiveAmount
+                // }
+                value={expectedReceiveAmount || 'Loading...'}
+                size="large"
+                allowClear
+                disabled
+                addonAfter={_LabelSelector({
+                  fieldName: 'toCurrency',
+                  defaultTicker: formik.values.toCurrency,
+                  currencyList,
+                })}
+              />
+            </Form.Item>
+          </Col>
 
-            <Col span={24}>
-              <Row justify="center">
-                <Text>
-                  {`1 ${formik.values.fromCurrency.toUpperCase()} ~ ${
-                    calculateRate(
-                      formik.values.expectedSendAmount,
-                      expectedReceiveAmount,
-                      1000000,
-                    ) || '...'
-                  } ${formik.values.toCurrency.toUpperCase()} Expected Rate`}
-                </Text>
-              </Row>
-            </Col>
+          <Col span={24}>
+            <Row justify="center">
+              <Text>
+                {`1 ${formik.values.fromCurrency.toUpperCase()} ~ ${
+                  calculateRate(formik.values.expectedSendAmount, expectedReceiveAmount, 1000000) ||
+                  'Loading...'
+                } ${formik.values.toCurrency.toUpperCase()} Expected Rate`}
+              </Text>
+            </Row>
+          </Col>
 
-            <Col span={12}>
-              <Button type="primary" htmlType="submit" size="large" style={{ width: '100%' }}>
-                Swap
-              </Button>
-            </Col>
-          </Row>
-        </Form>
-      ) : (
-        123
-      )}
+          <Col span={12}>
+            <Button type="primary" htmlType="submit" size="large" style={{ width: '100%' }}>
+              Swap
+            </Button>
+          </Col>
+        </Row>
+      </Form>
     </>
   );
 };

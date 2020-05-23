@@ -13,6 +13,7 @@ export const _setExpectedSendAmountFromCurrencyToCurrency =
 export const _setMinAmount = 'ExchangeForm_setMinAmount';
 export const _setCurrencyList = 'ExchangeForm_setCurrencyList';
 export const _setOrder = 'ExchangeForm_setOrder';
+export const _updateOrder = 'ExchangeForm_updateOrder';
 export const _setExpectedReceiveAmountEstimatedArrival =
   'ExchangeForm_setExpectedReceiveAmountEstimatedArrival';
 

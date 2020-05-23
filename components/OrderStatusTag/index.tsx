@@ -20,7 +20,7 @@ const selectStatusTag = (status: string): React.ReactElement => {
     case 'waiting':
       return (
         <Tag
-          icon={<ClockCircleOutlined style={{ verticalAlign: '.08rem' }} />}
+          icon={<ClockCircleOutlined style={{ verticalAlign: '.01rem' }} />}
           color="default"
           style={{ verticalAlign: 'middle' }}
         >
@@ -30,14 +30,14 @@ const selectStatusTag = (status: string): React.ReactElement => {
       break;
     case 'exchanging':
       return (
-        <Tag icon={<SyncOutlined spin style={{ verticalAlign: '.08rem' }} />} color="processing">
+        <Tag icon={<SyncOutlined spin style={{ verticalAlign: '.01rem' }} />} color="processing">
           {status}
         </Tag>
       );
       break;
     case 'finished':
       return (
-        <Tag icon={<CheckCircleOutlined style={{ verticalAlign: '.08rem' }} />} color="success">
+        <Tag icon={<CheckCircleOutlined style={{ verticalAlign: '.01rem' }} />} color="success">
           {status}
         </Tag>
       );
@@ -45,7 +45,7 @@ const selectStatusTag = (status: string): React.ReactElement => {
     default:
       return (
         <Tag
-          icon={<ExclamationCircleOutlined style={{ verticalAlign: '.08rem' }} />}
+          icon={<ExclamationCircleOutlined style={{ verticalAlign: '.01rem' }} />}
           color="warning"
         >
           {status}

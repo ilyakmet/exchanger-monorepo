@@ -6,8 +6,11 @@ import {
   GetExpectedReceiveAmountParams,
 } from '../../interfaces';
 
+// Lodash
+import _ from 'lodash';
+
 // Redux
-import { takeEvery, put, call } from 'redux-saga/effects';
+import { takeEvery, put, call, delay } from 'redux-saga/effects';
 
 // Action Types
 import {
@@ -22,6 +25,7 @@ import {
   setMinAmount,
   setCurrencyList,
   setOrder,
+  updateOrder,
   setExpectedReceiveAmountEstimatedArrival,
 } from '../actions/exchangeForm';
 
@@ -31,6 +35,7 @@ import {
   getCurrencyList,
   getExpectedReceiveAmount,
   postOrder,
+  getOrderUpdates,
 } from '../../lib/fetch';
 
 function* setMinAmountSaga({
@@ -54,11 +59,24 @@ function* setOrderSaga({ payload }: ReduxActionType<PostOrderParams>) {
 
   console.log('setOrderSaga2: ', data);
   yield put(setOrder(data));
+
+  while (true) {
+    yield delay(_.multiply(60, 1000));
+    console.log('updateOrderSaga');
+    const updates = yield call(getOrderUpdates, { id: data.id });
+    yield put(updateOrder(updates));
+  }
 }
 
 function* setExpectedReceiveAmountEstimatedArrivalSaga({
   payload: { expectedSendAmount, fromCurrency, toCurrency },
 }: ReduxActionType<GetExpectedReceiveAmountParams>) {
+  yield put(
+    setExpectedReceiveAmountEstimatedArrival({
+      expectedReceiveAmount: 0,
+      estimatedArrival: '',
+    }),
+  );
   const { estimatedAmount, transactionSpeedForecast, warningMessage } = yield call(
     getExpectedReceiveAmount,
     {

@@ -10,6 +10,7 @@ import {
   SetOrderParams,
   GetExpectedReceiveAmountParams,
   PostOrderParams,
+  UpdateOrderParams,
 } from '../../interfaces';
 
 // Action Types
@@ -20,6 +21,7 @@ import {
   _setPayoutAddress,
   _resetPayoutAddress,
   _setOrder,
+  _updateOrder,
   _setExpectedSendAmountFromCurrencyToCurrency,
   _setMinAmount,
   _setCurrencyList,
@@ -105,6 +107,27 @@ export const setOrder = ({
     toCurrency,
     id,
     expectedReceiveAmount,
+  },
+});
+
+export const updateOrder = ({
+  payinAddress,
+  payoutAddress,
+  fromCurrency,
+  toCurrency,
+  id,
+  expectedReceiveAmount,
+  status,
+}: UpdateOrderParams): ReduxActionType<UpdateOrderParams> => ({
+  type: _updateOrder,
+  payload: {
+    payinAddress,
+    payoutAddress,
+    fromCurrency,
+    toCurrency,
+    id,
+    expectedReceiveAmount,
+    status,
   },
 });
 
