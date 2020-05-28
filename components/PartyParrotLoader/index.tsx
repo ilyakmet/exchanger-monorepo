@@ -20,7 +20,10 @@ export const PartyParrotLoader: React.FC<{
       <Col span={24}>
         <Row justify="center">
           <Col>
-            <img src={`${rootApi}/${parrotNames[_.random(0, 10)]}.gif`} style={{ width: size }} />
+            <img
+              src={`${rootApi}/${parrotNames[_.random(0, parrotNames.length - 1)]}.gif`}
+              style={{ width: size }}
+            />
           </Col>
         </Row>
       </Col>
